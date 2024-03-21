@@ -1,0 +1,48 @@
+###
+
+POST http://localhost:8080/api/crimes
+Content-Type: application/json
+Accept: application/json
+Authorization: 9df0a8a8-2107-4d1a-bbcd-76bb5a01e3a5
+
+{
+  "type_crime": "Pencurian",
+  "name_crime": "Pencurian Mobil",
+  "location": "Jakarta Barat",
+  "incident_date": "2022-07-12"
+}
+
+###
+
+GET http://localhost:8080/api/crimes
+Content-Type: application/json
+Accept: application/json
+Authorization: 05829141-0f24-4171-adc7-9fc846185454
+
+###
+
+GET http://localhost:8080/api/crimes/1
+Content-Type: application/json
+Accept: application/json
+Authorization: 6276e104-929c-45be-a2b3-d18dc26e9bf1
+
+### Update
+
+PUT http://localhost:8080/api/crimes/1
+Content-Type: application/json
+Accept: application/json
+Authorization: 9df0a8a8-2107-4d1a-bbcd-76bb5a01e3a5
+
+{
+  "type_crime": "Pencurian",
+  "name_crime": "Pencurian Mobil",
+  "location": "Jakarta Selatan",
+  "incident_date": 1647235931000
+}
+
+### Delete Contact
+
+DELETE http://localhost:8080/api/crimes/645
+Content-Type: application/json
+Accept: application/json
+Authorization: c82dc936-2db7-499e-b611-07878f292518

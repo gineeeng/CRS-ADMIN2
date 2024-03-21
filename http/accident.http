@@ -1,0 +1,52 @@
+### Create
+
+POST http://localhost:8080/api/accidents
+Content-Type: application/json
+Accept: application/json
+Authorization: 05829141-0f24-4171-adc7-9fc846185454
+
+{
+  "date": "2023-06-17",
+  "location": "Way Kanan",
+  "description": "Kecelakkan terjadi di kabupaten Way Kn",
+  "fatalities": 3,
+  "injured": 2,
+  "vehicle_type": "motor"
+}
+
+### Get All
+
+GET http://localhost:8080/api/accidents
+Content-Type: application/json
+Accept: application/json
+Authorization: b212fc4d-f18a-40d3-9fc1-d52371f64fae
+
+### Get One
+
+GET http://localhost:8080/api/accidents/3
+Content-Type: application/json
+Accept: application/json
+Authorization: 6276e104-929c-45be-a2b3-d18dc26e9bf1
+
+### Update
+
+PUT http://localhost:8080/api/accidents/3
+Content-Type: application/json
+Accept: application/json
+Authorization: 6276e104-929c-45be-a2b3-d18dc26e9bf1
+
+{
+  "date": "2023-06-18",
+  "location": "Way Kanan",
+  "description": "Kecelakkan terjadi di kabupaten Way Kn",
+  "fatalities": 6,
+  "injured": 2,
+  "vehicle_type": "motor"
+}
+
+### Delete Contact
+
+DELETE http://localhost:8080/api/accidents/4
+Content-Type: application/json
+Accept: application/json
+Authorization: 6276e104-929c-45be-a2b3-d18dc26e9bf1
