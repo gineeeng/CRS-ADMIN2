@@ -10,6 +10,7 @@ import Loader from "../components/Loader";
 import SelectStatusTab from "../components/select/SelectStatusTab";
 import SearchBar from "../components/input/Searchbar";
 import CrimeDataTable from "../components/table/CrimeDataTable";
+import ReadyToPrintCrimeTable from "../components/table/ReadyToPrintCrimeTable";
 
 const Crime = () => {
   const token = Cookies.get("token");
@@ -59,6 +60,7 @@ const Crime = () => {
           selectedMonth={selectedMonth}
           setSelectedMonth={setSelectedMonth}
         />
+        <ReadyToPrintCrimeTable data={filteredData}/>
       </div>
       <SelectStatusTab
         selectedTab={selectedTab}

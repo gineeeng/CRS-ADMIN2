@@ -73,6 +73,7 @@ const CrimeDataTable = ({ data, actionStatus, updateActionStatus }) => {
                     { value: "InProgress", label: "In Progress" },
                     { value: "Solved", label: "Solved" },
                     { value: "Closed Case", label: "Closed Case" },
+                    { value: "Archive", label: "Archive" },
                   ]}
                   value={{
                     value: actionStatus[index] || "InProgress",

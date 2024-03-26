@@ -6,6 +6,7 @@ import SearchBar from "../components/input/Searchbar";
 import useFetchData from "../hooks/useFetchData";
 import Loader from "../components/Loader";
 import UserDataTable from "../components/table/UserDataTable";
+import ReadyToPrintUserTable from "../components/table/ReadyToPrintUserTable";
 
 const User = () => {
   const token = Cookies.get("token");
@@ -59,6 +60,7 @@ const User = () => {
   return (
     <div className="p-2 justify-center text-4xl">
       <h1 className="font-semibold mt-4 text-white">User Management</h1>
+      <ReadyToPrintUserTable data={filteredUsers} />
       <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       <UserDataTable  
         data={filteredUsers}

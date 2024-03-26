@@ -10,6 +10,7 @@ import SelectStatusTab from "../components/select/SelectStatusTab";
 import SearchBar from "../components/input/Searchbar";
 import Loader from "../components/Loader";
 import DataTable from "../components/table/DataTable";
+import ReadyToPrintTable from "../components/table/ReadyToPrintTable";
 
 const Arson = () => {
   const token = Cookies.get("token");
@@ -58,6 +59,7 @@ const Arson = () => {
           selectedMonth={selectedMonth}
           setSelectedMonth={setSelectedMonth}
         />
+         <ReadyToPrintTable data={filteredData} />
       </div>
       <SelectStatusTab
         selectedTab={selectedTab}

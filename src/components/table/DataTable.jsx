@@ -4,16 +4,16 @@ import View from "../modal/View";
 
 const DataTable = ({ data, actionStatus, updateActionStatus }) => {
   const headers = [
-    'ID',
-    'Type',
-    'Description',
-    'No. of casualties',
-    'No. of Injuries',
-    'Injury Severity',
-    'Date',
-    'Location',
-    'Action Status',
-    'Action'
+    "ID",
+    "Type",
+    "Description",
+    "No. of casualties",
+    "No. of Injuries",
+    "Injury Severity",
+    "Date",
+    "Location",
+    "Action Status",
+    "Action",
   ];
 
   return (
@@ -69,6 +69,7 @@ const DataTable = ({ data, actionStatus, updateActionStatus }) => {
                     { value: "InProgress", label: "In Progress" },
                     { value: "Solved", label: "Solved" },
                     { value: "Closed Case", label: "Closed Case" },
+                    { value: "Archive", label: "Archive" },
                   ]}
                   value={{
                     value: actionStatus[index] || "InProgress",
@@ -80,6 +81,7 @@ const DataTable = ({ data, actionStatus, updateActionStatus }) => {
                   className="px-2 py-1 fs-5 rounded-lg text-md"
                 />
               </td>
+
               <td className="flex items-center justify-center">
                 <div className="mr-1">
                   <Delete id={item._id} />

@@ -2,7 +2,7 @@ const SelectStatusTab = ({ selectedTab, setSelectedTab }) => {
   return (
     <div className="mt-4">
       <div className="flex flex-wrap justify-center sm:justify-start ">
-        {["All", "Pending", "InProgress", "Solved", "Closed Case"].map(
+        {["All", "Pending", "InProgress", "Solved", "Closed Case",].map(
           (status) => (
             <button
               key={status}

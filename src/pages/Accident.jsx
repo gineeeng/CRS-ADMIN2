@@ -10,7 +10,7 @@ import SelectStatusTab from "../components/select/SelectStatusTab";
 import SearchBar from "../components/input/Searchbar";
 import Loader from "../components/Loader";
 import DataTable from "../components/table/DataTable";
-
+import ReadyToPrintTable from "../components/table/ReadyToPrintTable";
 
 const Accident = () => {
   const token = Cookies.get("token");
@@ -24,8 +24,20 @@ const Accident = () => {
   const [selectedTab, setSelectedTab] = useState("All");
   const [actionStatus, setActionStatus] = useState([]);
 
-  const updateActionStatus = useUpdateActionStatus(data, actionStatus, setActionStatus, token, toast);
-  const filteredData = useFilteredData(data, searchQuery, selectedLocation, selectedMonth, selectedTab);
+  const updateActionStatus = useUpdateActionStatus(
+    data,
+    actionStatus,
+    setActionStatus,
+    token,
+    toast
+  );
+  const filteredData = useFilteredData(
+    data,
+    searchQuery,
+    selectedLocation,
+    selectedMonth,
+    selectedTab
+  );
 
   useEffect(() => {
     if (data) {
@@ -35,7 +47,7 @@ const Accident = () => {
   }, [data]);
 
   if (loading) return <Loader />;
- 
+
   return (
     <div className="p-2 justify-center text-4xl">
       <h1 className="font-semibold mt-4 text-white">Accident Reports</h1>
@@ -48,13 +60,13 @@ const Accident = () => {
           selectedMonth={selectedMonth}
           setSelectedMonth={setSelectedMonth}
         />
+        <ReadyToPrintTable data={filteredData} />
       </div>
       <SelectStatusTab
         selectedTab={selectedTab}
         setSelectedTab={setSelectedTab}
       />
       <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-
       <DataTable
         data={filteredData}
         actionStatus={actionStatus}
