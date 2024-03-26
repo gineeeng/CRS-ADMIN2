@@ -224,24 +224,22 @@ const FindUser = () => {
           </div>
         </div>
       </div>
-      <div className="mt-4">
+      <div className="grid grid-cols-2 gap-6 mt-4">
         {reports.map((report, index) => (
-          <div key={index} className="mb-6 p-4 border rounded-lg shadow-md">
+          <div key={index} className="p-4 border rounded-lg shadow-md">
+            <div className="text-xl font-semibold mb-2">
+              {report.reportType} | {report.type}
+            </div>
+            <div
+              className={`px-3 py-1 rounded-md ${
+                report.action_status === "Solved"
+                  ? "bg-green-500"
+                  : "bg-red-500"
+              } text-white font-bold text-xl mb-4`}
+            >
+              {report.action_status}
+            </div>
             <div>
-              <div className="flex justify-between">
-                <div className="text-xl font-semibold mb-2">
-                  {report.reportType} | {report.type}
-                </div>
-                <div
-                  className={`px-3 py-1 rounded-md ${
-                    report.action_status === "Solved"
-                      ? "bg-green-500"
-                      : "bg-red-500"
-                  } text-white font-bold text-xl`}
-                >
-                  {report.action_status}
-                </div>
-              </div>
               {report.photoURL && (
                 <Swiper
                   spaceBetween={50}
@@ -254,11 +252,22 @@ const FindUser = () => {
                       <img
                         src={url}
                         alt={`Accident ${index + 1}`}
-                        className="rounded-md"
+                        className="w-full object-cover rounded-md"
+                        style={{ maxHeight: 300 }}
                       />
                     </SwiperSlide>
                   ))}
                 </Swiper>
+              )}
+              {report.videoURL && (
+                <video controls className="rounded-md w-full"   style={{ maxHeight: 300 }}>
+                  <source
+                    src={report.videoURL}
+                    type="video/mp4"
+                  
+                  />
+                  Your browser does not support the video tag.
+                </video>
               )}
               <h3 className="font-bold text-2xl mt-2 mb-4">
                 {report.description}

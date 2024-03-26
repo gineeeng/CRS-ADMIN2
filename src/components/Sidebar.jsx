@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { HiMenuAlt3 } from "react-icons/hi";
-import { MdOutlineDashboard } from "react-icons/md";
+import { MdBookmarkBorder, MdOutlineDashboard } from "react-icons/md";
 import { AiOutlineUser } from "react-icons/ai";
-import { MdOutlineLocalPolice } from "react-icons/md";
+import { MdOutlineLocalPolice, MdOutlineBookmark } from "react-icons/md";
 import { FiLogOut } from "react-icons/fi";
 import { TbAmbulance } from "react-icons/tb";
 import { Link, useNavigate } from "react-router-dom";
@@ -34,7 +34,7 @@ const Sidebar = () => {
     { name: "Hazards", link: "/dashboard/hazard", icon: FaBiohazard },
     { name: "Arsons", link: "/dashboard/arson", icon: FaFire },
     { name: "Users", link: "/dashboard/user", icon: AiOutlineUser },
-    { name: "Archive", link: "/dashboard/archive", icon: AiOutlineUser },
+    { name: "Archive", link: "/dashboard/archive", icon: MdOutlineBookmark },
   ];
 
   const handleMenuClick = (index) => {
