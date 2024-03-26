@@ -7,6 +7,7 @@ import User from "../pages/User";
 import FindUser from "../pages/FindUser";
 import Arson from "../pages/Arson";
 import Hazards from "../pages/Hazards";
+import Archive from "../pages/Archive";
 
 export const mainRoutes = [
   {
@@ -44,6 +45,10 @@ export const mainRoutes = [
       {
         path: "user/:id",
         element: <FindUser/>,
+      },
+      {
+        path: "archive",
+        element: <Archive/>,
       },
     ],
   },

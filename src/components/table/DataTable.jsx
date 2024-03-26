@@ -1,8 +1,13 @@
 import Select from "react-select";
 import Delete from "../modal/Delete";
 import View from "../modal/View";
+import { useLocation } from "react-router-dom";
 
 const DataTable = ({ data, actionStatus, updateActionStatus }) => {
+  const location = useLocation();
+
+  const shouldShowArchiveOption = location.pathname !== "/dashboard/archive";
+
   const headers = [
     "ID",
     "Type",

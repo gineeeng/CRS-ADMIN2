@@ -1,8 +1,13 @@
 import Select from "react-select";
 import Delete from "../modal/Delete";
 import View from "../modal/View";
+import { useLocation } from "react-router-dom";
 
 const CrimeDataTable = ({ data, actionStatus, updateActionStatus }) => {
+  const location = useLocation();
+
+  const shouldShowArchiveOption = location.pathname !== "/dashboard/archive";
+
   const headers = [
     "ID",
     "Crime Type",
@@ -68,13 +73,22 @@ const CrimeDataTable = ({ data, actionStatus, updateActionStatus }) => {
               </td>
               <td className="text-black text-md font-base text-center">
                 <Select
-                  options={[
-                    { value: "Pending", label: "Pending" },
-                    { value: "InProgress", label: "In Progress" },
-                    { value: "Solved", label: "Solved" },
-                    { value: "Closed Case", label: "Closed Case" },
-                    { value: "Archive", label: "Archive" },
-                  ]}
+                  options={
+                    shouldShowArchiveOption
+                      ? [
+                          { value: "Pending", label: "Pending" },
+                          { value: "InProgress", label: "In Progress" },
+                          { value: "Solved", label: "Solved" },
+                          { value: "Closed Case", label: "Closed Case" },
+                          { value: "Archive", label: "Archive" },
+                        ]
+                      : [
+                          { value: "Pending", label: "Pending" },
+                          { value: "InProgress", label: "In Progress" },
+                          { value: "Solved", label: "Solved" },
+                          { value: "Closed Case", label: "Closed Case" },
+                        ]
+                  }
                   value={{
                     value: actionStatus[index] || "InProgress",
                     label: actionStatus[index] || "In Progress",

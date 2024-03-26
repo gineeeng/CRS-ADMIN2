@@ -34,6 +34,7 @@ const Sidebar = () => {
     { name: "Hazards", link: "/dashboard/hazard", icon: FaBiohazard },
     { name: "Arsons", link: "/dashboard/arson", icon: FaFire },
     { name: "Users", link: "/dashboard/user", icon: AiOutlineUser },
+    { name: "Archive", link: "/dashboard/archive", icon: AiOutlineUser },
   ];
 
   const handleMenuClick = (index) => {
