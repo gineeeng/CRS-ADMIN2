@@ -30,7 +30,9 @@ const User = () => {
 
     axios
       .put(
-        `${import.meta.env.VITE_CRS_API_KEY}/api/users/${data[index]._id}/status`,
+        `${import.meta.env.VITE_CRS_API_KEY}/api/users/${
+          data[index]._id
+        }/status`,
         {
           actionStatus: newStatus,
         },
@@ -59,10 +61,12 @@ const User = () => {
 
   return (
     <div className="p-2 justify-center text-4xl">
-      <h1 className="font-semibold mt-4 text-white">User Management</h1>
-      <ReadyToPrintUserTable data={filteredUsers} />
+      <div className="flex gap-2 items-center justify-between mt-4">
+        <h1 className="font-semibold text-white">User Management</h1>
+        <ReadyToPrintUserTable data={filteredUsers} />
+      </div>
       <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-      <UserDataTable  
+      <UserDataTable
         data={filteredUsers}
         userStatus={userStatus}
         updateUserStatus={updateUserStatus}

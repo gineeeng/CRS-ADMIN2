@@ -5,7 +5,6 @@ const useUpdateActionStatus = (data, actionStatus, setActionStatus, token, toast
     const updatedStatus = [...actionStatus];
     updatedStatus[index] = newStatus;
     setActionStatus(updatedStatus);
-
     axios
       .put(
         `${import.meta.env.VITE_CRS_API_KEY}/api/reports/${data[index]._id}`,
@@ -17,9 +16,9 @@ const useUpdateActionStatus = (data, actionStatus, setActionStatus, token, toast
         }
       )
       .then(() => {
+        console.log("tite");
+
         toast.success(`Status updated to ${newStatus} successfully!`);
-        const updatedStatus = [...actionStatus];
-        updatedStatus[index] = newStatus;
         setActionStatus(updatedStatus);
       })
       .catch((error) => {

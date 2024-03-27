@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import useFetchData from "../hooks/useFetchData";
+import useFilteredData from "../hooks/useFilteredData";
 import useUpdateActionStatus from "../hooks/useUpdateActionStatus";
 import SelectLocation from "../components/select/SelectLocation";
 import SelectMonth from "../components/select/SelectMonth";
@@ -19,7 +20,6 @@ const Archive = () => {
   const [selectedLocation, setSelectedLocation] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
   const [actionStatus, setActionStatus] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
 
   const updateActionStatus = useUpdateActionStatus(
     data,
@@ -28,38 +28,22 @@ const Archive = () => {
     token,
     toast
   );
-
-  const filterData = () => {
-    let filtered = [...data];
-
-    if (selectedLocation) {
-      filtered = filtered.filter((item) => item.location === selectedLocation);
-    }
-
-    if (selectedMonth) {
-      filtered = filtered.filter((item) => item.month === selectedMonth);
-    }
-
-    if (searchQuery) {
-      filtered = filtered.filter((item) =>
-        item.some((data) => data.includes(searchQuery))
-      );
-    }
-
-    filtered = filtered.filter((item) => item.action_status === "Archive");
-
-    setFilteredData(filtered);
-  };
+  const filteredData = useFilteredData(
+    data,
+    searchQuery,
+    selectedLocation,
+    selectedMonth,
+    "Archive"
+  );
 
   useEffect(() => {
     if (filteredData) {
-      const initialActionStatus = filteredData.map(
-        (data) => data.action_status
-      );
+      const initialActionStatus = filteredData.map((data) => data.action_status);
       setActionStatus(initialActionStatus);
-      filterData();
     }
-  }, [filteredData, selectedLocation, selectedMonth, searchQuery]);
+  }, [filteredData]);
+
+
   if (loading) return <Loader />;
 
   return (
