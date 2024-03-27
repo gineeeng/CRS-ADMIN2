@@ -18,9 +18,14 @@ const useUpdateActionStatus = (data, actionStatus, setActionStatus, token, toast
       )
       .then(() => {
         toast.success(`Status updated to ${newStatus} successfully!`);
+        const updatedStatus = [...actionStatus];
+        updatedStatus[index] = newStatus;
+        setActionStatus(updatedStatus);
       })
       .catch((error) => {
         console.log(error);
+        updatedStatus[index] = actionStatus[index];
+        setActionStatus(updatedStatus);
         toast.error(
           `Failed to update status to ${newStatus}. Please try again.`
         );

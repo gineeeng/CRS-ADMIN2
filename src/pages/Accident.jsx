@@ -31,6 +31,7 @@ const Accident = () => {
     token,
     toast
   );
+
   const filteredData = useFilteredData(
     data,
     searchQuery,
@@ -40,11 +41,13 @@ const Accident = () => {
   );
 
   useEffect(() => {
-    if (data) {
-      const initialActionStatus = data.map((data) => data.action_status);
+    if (filteredData) {
+      const initialActionStatus = filteredData.map(
+        (data) => data.action_status
+      );
       setActionStatus(initialActionStatus);
     }
-  }, [data]);
+  }, [filteredData]);
 
   if (loading) return <Loader />;
 

@@ -39,11 +39,13 @@ const Arson = () => {
   );
 
   useEffect(() => {
-    if (data) {
-      const initialActionStatus = data.map((data) => data.action_status);
+    if (filteredData) {
+      const initialActionStatus = filteredData.map(
+        (data) => data.action_status
+      );
       setActionStatus(initialActionStatus);
     }
-  }, [data]);
+  }, [filteredData]);
 
   if (loading) return <Loader />;
 
@@ -59,7 +61,7 @@ const Arson = () => {
           selectedMonth={selectedMonth}
           setSelectedMonth={setSelectedMonth}
         />
-         <ReadyToPrintTable data={filteredData} />
+        <ReadyToPrintTable data={filteredData} />
       </div>
       <SelectStatusTab
         selectedTab={selectedTab}

@@ -20,8 +20,10 @@ const useFilteredData = (data, searchQuery, selectedLocation, selectedMonth, sel
 
       const matchesMonth = !selectedMonth || crimeMonth === selectedMonth;
 
-      const matchesStatus = selectedTab === 'All' || item.action_status === selectedTab;
-
+      const matchesStatus =
+      selectedTab === 'All' ||
+      (selectedTab !== 'Archive' && item.action_status === selectedTab);
+    
       return matchesSearch && matchesLocation && matchesMonth && matchesStatus;
     });
 
