@@ -21,19 +21,21 @@ const Archive = () => {
   const [selectedMonth, setSelectedMonth] = useState("");
   const [actionStatus, setActionStatus] = useState([]);
 
-  const updateActionStatus = useUpdateActionStatus(
-    data,
-    actionStatus,
-    setActionStatus,
-    token,
-    toast
-  );
+
   const filteredData = useFilteredData(
     data,
     searchQuery,
     selectedLocation,
     selectedMonth,
     "Archive"
+  );
+
+  const updateActionStatus = useUpdateActionStatus(
+    filteredData,
+    actionStatus,
+    setActionStatus,
+    token,
+    toast
   );
 
   useEffect(() => {

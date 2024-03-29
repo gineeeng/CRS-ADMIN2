@@ -16,8 +16,6 @@ const useUpdateActionStatus = (data, actionStatus, setActionStatus, token, toast
         }
       )
       .then(() => {
-        console.log("tite");
-
         toast.success(`Status updated to ${newStatus} successfully!`);
         setActionStatus(updatedStatus);
       })
