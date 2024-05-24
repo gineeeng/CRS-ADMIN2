@@ -1,15 +1,16 @@
 import Select from "react-select";
 import Delete from "../modal/Delete";
 import View from "../modal/View";
+import Restore from "../modal/Restore";
+import { useLocation } from "react-router-dom";
 
 const DataTable = ({ data, actionStatus, updateActionStatus }) => {
+  const location = useLocation();
+  const isArchive = location.pathname === "/dashboard/archive";
+
   const headers = [
     "ID",
     "Type",
-    "Description",
-    "No. of casualties",
-    "No. of Injuries",
-    "Injury Severity",
     "Date",
     "Location",
     "Action Status",
@@ -18,13 +19,13 @@ const DataTable = ({ data, actionStatus, updateActionStatus }) => {
 
   return (
     <div className="overflow-x-auto mt-4 justify-center min-h-screen">
-      <table className="table justify-center bg-[#191919]">
+      <table className="table justify-center bg-gray-200 dark:bg-[#191919]">
         <thead>
           <tr>
             {headers.map((header, index) => (
               <th
                 key={index}
-                className="text-white text-lg font-semibold text-center"
+                className="text-gray-600 dark:text-white text-lg font-semibold text-center"
               >
                 {header}
               </th>
@@ -34,46 +35,32 @@ const DataTable = ({ data, actionStatus, updateActionStatus }) => {
         <tbody>
           {data.map((item, index) => (
             <tr key={item._id}>
-              <td className="text-white text-md font-base text-center">
+              <td className="text-gray-600 dark:text-white text-md font-base text-center">
                 {index + 1}
               </td>
-              <td className="text-white text-md font-base text-center">
+              <td className="text-gray-600 dark:text-white text-md font-base text-center">
                 {item.type}
               </td>
-              <td className="text-white text-md font-base text-center">
-                {item.description || "none"}
-              </td>
-              <td className="text-white text-md font-base text-center">
-                {item.numberOfCasualties || "none"}
-              </td>
-              <td className="text-white text-md font-base text-center">
-                {item.numberOfInjuries || "none"}
-              </td>
-              <td className="text-white text-md font-base text-center">
-                {item.injurySeverity || "none"}
-              </td>
-              <td className="text-white text-md font-base text-center">
+              <td className="text-gray-600 dark:text-white text-md font-base text-center">
                 {new Date(item.date).toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "long",
                   day: "numeric",
                 })}
               </td>
-              <td className="text-white text-md font-base text-center">
+              <td className="text-gray-600 dark:text-white text-md font-base text-center">
                 {`${item.location.barangay}, ${item.location.municipality}`}
               </td>
               <td className="text-black text-md font-base text-center">
                 <Select
                   options={[
-                    { value: "Pending", label: "Pending" },
-                    { value: "InProgress", label: "In Progress" },
+                    { value: "Under Investigation", label: "Under Investigation" },
                     { value: "Solved", label: "Solved" },
-                    { value: "Closed Case", label: "Closed Case" },
-                    { value: "Archive", label: "Archive" },
+                    { value: "Case Closed", label: "Case Closed" },
                   ]}
                   value={{
-                    value: actionStatus[index] || "InProgress",
-                    label: actionStatus[index] || "In Progress",
+                    value: actionStatus[index] || "Under Investigation",
+                    label: actionStatus[index] || "Under Investigation",
                   }}
                   onChange={(selectedOption) =>
                     updateActionStatus(index, selectedOption.value)
@@ -84,10 +71,10 @@ const DataTable = ({ data, actionStatus, updateActionStatus }) => {
 
               <td className="flex items-center justify-center">
                 <div className="mr-1">
-                  <Delete id={item._id} />
+                  {isArchive ? <Restore id={item._id} /> : <Delete id={item._id}/>}
                 </div>
                 <div className="mr-1">
-                  <View id={item._id} />
+                  <View id={item._id} userId={item.userId} />
                 </div>
               </td>
             </tr>

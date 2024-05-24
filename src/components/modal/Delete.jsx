@@ -8,7 +8,10 @@ const Delete = ({id}) => {
   const [modal, setModal] = useState(false);
 
   const handleDelete = async () => {
-    await axios.delete(`${import.meta.env.VITE_CRS_API_KEY}/api/reports/${id}`, {
+    await axios.put(`${import.meta.env.VITE_CRS_API_KEY}/api/reports/${id}`,
+    { action_status: "Archive" },
+
+     {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -27,7 +30,7 @@ const Delete = ({id}) => {
         onClick={handleChange}
         className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium 
         rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
-          Delete
+          Archive
       </button>
 
       <input
@@ -38,9 +41,9 @@ const Delete = ({id}) => {
       />
 
       <div className="modal">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">
-            Are sure to delete this accident?
+      <div className="modal-box bg-lime-700">
+          <h3 className="font-bold text-2xl text-white">
+            Are sure to archive this incident?
           </h3>
           <div className="modal-action">
             <button type="button" className="btn" onClick={handleChange}>
@@ -53,7 +56,7 @@ const Delete = ({id}) => {
               className="btn focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium 
               rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
             >
-              Delete
+              Archive
             </button>
           </div>
         </div>

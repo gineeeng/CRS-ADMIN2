@@ -62,7 +62,7 @@ const User = () => {
   return (
     <div className="p-2 justify-center text-4xl">
       <div className="flex gap-2 items-center justify-between mt-4">
-        <h1 className="font-semibold text-white">User Management</h1>
+        <h1 className="font-semibold">User Management</h1>
         <ReadyToPrintUserTable data={filteredUsers} />
       </div>
       <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />

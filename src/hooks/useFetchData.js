@@ -15,7 +15,7 @@ const useFetchData = (api) => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setData(response.data);
+        setData(response.data.reverse());
         setLoading(false);
       } catch (error) {
         console.error("Error fetching Data:", error);

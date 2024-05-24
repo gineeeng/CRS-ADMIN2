@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   BarChart,
   Bar,
@@ -8,606 +8,271 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  Cell,
 } from "recharts";
-import axios from "axios";
-import Cookies from "js-cookie";
 import ReportCard from "../components/cards/ReportCard";
+import useFetchData from "../hooks/useFetchData";
+import Loader from "../components/Loader";
+
+const locations = [
+  "Bacayao Norte, Dagupan City",
+  "Bacayao Sur, Dagupan City",
+  "Bolosan, Dagupan City",
+  "Bonuan Binloc, Dagupan City",
+  "Bonuan Boquig, Dagupan City",
+  "Bonuan Gueset, Dagupan City",
+  "Calmay, Dagupan City",
+  "Carael, Dagupan City",
+  "Caranglaan, Dagupan City",
+  "Herrero, Dagupan City",
+  "Lasip Chico, Dagupan City",
+  "Lasip Grande, Dagupan City",
+  "Lomboy, Dagupan City",
+  "Lucao, Dagupan City",
+  "Malued, Dagupan City",
+  "Mamalingling, Dagupan City",
+  "Mangin, Dagupan City",
+  "Mayombo, Dagupan City",
+  "Pantal, Dagupan City",
+  "Poblacion Oeste, Dagupan City",
+  "Pogo Chico, Dagupan City",
+  "Pogo Grande, Dagupan City",
+  "Pugaro Suit, Dagupan City",
+  "Salapingao, Dagupan City",
+  "Salisay, Dagupan City",
+  "Tambac, Dagupan City",
+  "Tapuac, Dagupan City",
+  "Tebeng, Dagupan City",
+];
 
 const Welcome = () => {
-  const token = Cookies.get("token");
-  const [crimeData, setCrimeData] = useState([]);
-  const [accidentData, setAccidentData] = useState([]);
-  const [arsonData, setArsonData] = useState([]);
-  const [hazardData, setHazardData] = useState([]);
-  const [unSolvedCrimeData, setUnSolvedCrimeData] = useState([]);
-  const [solvedCrimeData, setSolvedCrimeData] = useState([]);
-  const [unSolvedAccidentData, setUnSolvedAccidentData] = useState([]);
-  const [solvedAccidentData, setSolvedAccidentData] = useState([]);
-  const [unSolvedArsonData, setUnsolvedArsonData] = useState([]);
-  const [solvedArsonData, setSolvedArsonData] = useState([]);
-  const [unSolvedHazardData, setUnsolvedHazardData] = useState([]);
-  const [solvedHazardData, setSolvedHazardData] = useState([]);
   const [filterCriteria, setFilterCriteria] = useState("month");
-  useEffect(() => {
-    getCrimes();
-    getAccidents();
-    getArsons();
-    getHazards();
-    getUnsolvedCrime();
-    getSolvedCrime();
-    getUnsolvedAccident();
-    getSolvedAccident();
-    getSolvedArson();
-    getUnsolvedArson();
-    getSolvedHazard();
-    getUnsolvedHazard();
-  }, []);
+  const [reportType, setReportType] = useState("Crime");
+  const [selectedLocation, setSelectedLocation] = useState("All");
+  const { data, loading } = useFetchData(
+    `${import.meta.env.VITE_CRS_API_KEY}/api/reports`
+  );
 
-  const getCrimes = () => {
-    axios
-      .get(`${import.meta.env.VITE_CRS_API_KEY}/api/reports/crimes`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((result) => {
-        setCrimeData(result.data);
-      })
-      .catch((err) => console.log(err));
-  };
+  if (loading) return <Loader />;
 
-  const getAccidents = () => {
-    axios
-      .get(`${import.meta.env.VITE_CRS_API_KEY}/api/reports/accidents`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((result) => {
-        setAccidentData(result.data);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const getArsons = () => {
-    axios
-      .get(`${import.meta.env.VITE_CRS_API_KEY}/api/reports/arsons`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((result) => {
-        setArsonData(result.data);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const getHazards = () => {
-    axios
-      .get(`${import.meta.env.VITE_CRS_API_KEY}/api/reports/hazards`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((result) => {
-        setHazardData(result.data);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const getUnsolvedCrime = () => {
-    axios
-      .get(`${import.meta.env.VITE_CRS_API_KEY}/api/reports/crimes/unsolved`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((result) => {
-        setUnSolvedCrimeData(result.data);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const getSolvedCrime = () => {
-    axios
-      .get(`${import.meta.env.VITE_CRS_API_KEY}/api/reports/crimes/solved`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((result) => {
-        setSolvedCrimeData(result.data);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const getUnsolvedAccident = () => {
-    axios
-      .get(
-        `${import.meta.env.VITE_CRS_API_KEY}/api/reports/accidents/unsolved`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((result) => {
-        setUnSolvedAccidentData(result.data);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const getSolvedAccident = () => {
-    axios
-      .get(`${import.meta.env.VITE_CRS_API_KEY}/api/reports/accidents/solved`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((result) => {
-        setSolvedAccidentData(result.data);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const getSolvedArson = () => {
-    axios
-      .get(`${import.meta.env.VITE_CRS_API_KEY}/api/reports/arsons/solved`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((result) => {
-        setSolvedArsonData(result.data);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const getUnsolvedArson = () => {
-    axios
-      .get(`${import.meta.env.VITE_CRS_API_KEY}/api/reports/arsons/unsolved`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((result) => {
-        setUnsolvedArsonData(result.data);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const getSolvedHazard = () => {
-    axios
-      .get(`${import.meta.env.VITE_CRS_API_KEY}/api/reports/hazards/solved`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((result) => {
-        setSolvedHazardData(result.data);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const getUnsolvedHazard = () => {
-    axios
-      .get(`${import.meta.env.VITE_CRS_API_KEY}/api/reports/hazards/unsolved`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((result) => {
-        setUnsolvedHazardData(result.data);
-      })
-      .catch((err) => console.log(err));
-  };
+  const filteredData = data.filter(
+    (item) =>
+      selectedLocation === "All" ||
+      `${item.location.barangay}, ${item.location.municipality}` === selectedLocation
+  );
 
   const combineData = () => {
-    const combinedData = [];
-    const allCrimeData = [...solvedCrimeData, ...unSolvedCrimeData];
-    const allAccidentData = [...solvedAccidentData, ...unSolvedAccidentData];
-    const allArsonData = [...solvedArsonData, ...unSolvedArsonData];
-    const allHazardData = [...solvedHazardData, ...unSolvedHazardData];
-
     let groupedData = {};
 
     if (filterCriteria === "month") {
-      groupedData = groupDataByMonth(
-        allCrimeData,
-        allAccidentData,
-        allArsonData,
-        allHazardData
-      );
-      const allMonths = Object.keys(groupedData);
-      const currentYear = new Date().getFullYear();
-      const monthsInYear = 12;
-      for (let i = 0; i < monthsInYear; i++) {
-        const monthName = new Date(currentYear, i).toLocaleString("default", {
-          month: "long",
-        });
-        if (!allMonths.includes(monthName)) {
-          groupedData[monthName] = {
-            solvedCrime: 0,
-            unSolvedCrime: 0,
-            solvedAccident: 0,
-            unSolvedAccident: 0,
-            solvedArson: 0,
-            unSolvedArson: 0,
-            solvedHazard: 0,
-            unSolvedHazard: 0,
-          };
-        }
-      }
+      groupedData = groupDataByMonth(filteredData, reportType);
     } else if (filterCriteria === "day") {
-      groupedData = groupDataByDay(
-        allCrimeData,
-        allAccidentData,
-        allArsonData,
-        allHazardData
-      );
-      const allDays = Object.keys(groupedData);
-
-      const weekdays = [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-      ];
-      for (let i = 0; i < weekdays.length; i++) {
-        const dayName = weekdays[i];
-        if (!allDays.includes(dayName)) {
-          groupedData[dayName] = {
-            solvedCrime: 0,
-            unSolvedCrime: 0,
-            solvedAccident: 0,
-            unSolvedAccident: 0,
-            solvedArson: 0,
-            unSolvedArson: 0,
-            solvedHazard: 0,
-            unSolvedHazard: 0,
-          };
-        }
-      }
+      groupedData = groupDataByDay(filteredData, reportType);
     } else if (filterCriteria === "year") {
-      groupedData = groupDataByYear(
-        allCrimeData,
-        allAccidentData,
-        allArsonData,
-        allHazardData
-      );
+      groupedData = groupDataByYear(filteredData, reportType);
     }
 
-    Object.keys(groupedData).forEach((key) => {
-      combinedData.push({
-        date: key,
-        ...groupedData[key],
-      });
-    });
+    const combinedData = Object.keys(groupedData).map((key) => ({
+      date: key,
+      ...groupedData[key],
+    }));
 
     return combinedData;
   };
 
-  const groupDataByMonth = (crimeData, accidentData) => {
+  const groupDataByMonth = (data, type) => {
     const groupedData = {};
 
-    const allDates = [
-      ...new Set(
-        crimeData
-          .map((item) => item.date)
-          .concat(accidentData.map((item) => item.date))
-      ),
-    ];
-    allDates.forEach((date) => {
-      const month = new Date(date).toLocaleString("default", { month: "long" });
+    data.forEach((item) => {
+      if (item.reportType !== type) return;
+      const month = new Date(item.date).toLocaleString("default", {
+        month: "long",
+      });
       if (!groupedData[month]) {
         groupedData[month] = {
-          solvedCrime: 0,
-          unSolvedCrime: 0,
-          solvedAccident: 0,
-          unSolvedAccident: 0,
-          solvedArson: 0,
-          unSolvedArson: 0,
-          solvedHazard: 0,
-          unSolvedHazard: 0,
+          solved: 0,
+          unsolved: 0,
         };
       }
 
-      groupedData[month].solvedCrime += countSolvedCrimesOnDate(date);
-      groupedData[month].unSolvedCrime += countUnsolvedCrimesOnDate(date);
-      groupedData[month].solvedAccident += countSolvedAccidentsOnDate(date);
-      groupedData[month].unSolvedAccident += countUnsolvedAccidentsOnDate(date);
-      groupedData[month].solvedArson += countSolvedArsonsOnDate(date);
-      groupedData[month].unSolvedArson += countUnsolvedArsonsOnDate(date);
-      groupedData[month].solvedHazard += countSolvedHazardsOnDate(date);
-      groupedData[month].unSolvedHazard += countUnsolvedHazardsOnDate(date);
+      updateGroupedData(groupedData[month], item);
     });
 
     return groupedData;
   };
 
-  const groupDataByDay = (crimeData, accidentData) => {
+  const groupDataByDay = (data, type) => {
     const groupedData = {};
 
-    const allDates = [
-      ...new Set(
-        crimeData
-          .map((item) => item.date)
-          .concat(accidentData.map((item) => item.date))
-      ),
-    ];
-    allDates.forEach((date) => {
-      const dayOfWeek = new Date(date).toLocaleDateString("en-US", {
+    data.forEach((item) => {
+      if (item.reportType !== type) return;
+      const dayOfWeek = new Date(item.date).toLocaleDateString("en-US", {
         weekday: "long",
       });
       if (!groupedData[dayOfWeek]) {
         groupedData[dayOfWeek] = {
-          solvedCrime: 0,
-          unSolvedCrime: 0,
-          solvedAccident: 0,
-          unSolvedAccident: 0,
-          solvedArson: 0,
-          unSolvedArson: 0,
-          solvedHazard: 0,
-          unSolvedHazard: 0,
+          solved: 0,
+          unsolved: 0,
         };
       }
 
-      groupedData[dayOfWeek].solvedCrime += countSolvedCrimesOnDate(date);
-      groupedData[dayOfWeek].unSolvedCrime += countUnsolvedCrimesOnDate(date);
-      groupedData[dayOfWeek].solvedAccident += countSolvedAccidentsOnDate(date);
-      groupedData[dayOfWeek].unSolvedAccident += countUnsolvedAccidentsOnDate(date);
-      groupedData[dayOfWeek].solvedArson += countSolvedArsonsOnDate(date);
-      groupedData[dayOfWeek].unSolvedArson += countUnsolvedArsonsOnDate(date);
-      groupedData[dayOfWeek].solvedHazard += countSolvedHazardsOnDate(date);
-      groupedData[dayOfWeek].unSolvedHazard += countUnsolvedHazardsOnDate(date);
+      updateGroupedData(groupedData[dayOfWeek], item);
     });
 
     return groupedData;
   };
 
-  const groupDataByYear = (crimeData, accidentData) => {
+  const groupDataByYear = (data, type) => {
     const groupedData = {};
 
-    const allDates = [
-      ...new Set(
-        crimeData
-          .map((item) => item.date)
-          .concat(accidentData.map((item) => item.date))
-      ),
-    ];
-    allDates.forEach((date) => {
-      const year = new Date(date).getFullYear();
+    data.forEach((item) => {
+      if (item.reportType !== type) return;
+      const year = new Date(item.date).getFullYear();
       if (!groupedData[year]) {
         groupedData[year] = {
-          solvedCrime: 0,
-          unSolvedCrime: 0,
-          solvedAccident: 0,
-          unSolvedAccident: 0,
-          solvedArson: 0,
-          unSolvedArson: 0,
-          solvedHazard: 0,
-          unSolvedHazard: 0,
+          solved: 0,
+          unsolved: 0,
         };
       }
 
-      groupedData[year].solvedCrime += countSolvedCrimesOnDate(date);
-      groupedData[year].unSolvedCrime += countUnsolvedCrimesOnDate(date);
-      groupedData[year].solvedAccident += countSolvedAccidentsOnDate(date);
-      groupedData[year].unSolvedAccident += countUnsolvedAccidentsOnDate(date);
-      groupedData[year].solvedArson += countSolvedArsonsOnDate(date);
-      groupedData[year].unSolvedArson += countUnsolvedArsonsOnDate(date);
-      groupedData[year].solvedHazard += countSolvedHazardsOnDate(date);
-      groupedData[year].unSolvedHazard += countUnsolvedHazardsOnDate(date);
+      updateGroupedData(groupedData[year], item);
     });
 
     return groupedData;
   };
 
-  const countSolvedCrimesOnDate = (date) => {
-    return solvedCrimeData.filter((item) => item.date === date).length;
+  const updateGroupedData = (group, item) => {
+    const status = item.action_status;
+
+    if (status === "Solved") group.solved++;
+    else group.unsolved++;
   };
 
-  const countUnsolvedCrimesOnDate = (date) => {
-    return unSolvedCrimeData.filter((item) => item.date === date).length;
+  const totalReports = (type) =>
+    filteredData.filter((item) => item.reportType === type).length;
+
+  const totalSolvedReports = (type) =>
+    filteredData.filter(
+      (item) => item.reportType === type && item.action_status === "Solved"
+    ).length;
+
+  const totalOngoingReports = (type) =>
+    filteredData.filter(
+      (item) => item.reportType === type && item.action_status !== "Solved"
+    ).length;
+
+  const getSeverityColor = (count) => {
+    if (count < 3) return "#eab308"; 
+    if (count < 6) return "#4d7c0f"; 
+    return "#dc2626";
   };
 
-  const countSolvedAccidentsOnDate = (date) => {
-    return solvedAccidentData.filter((item) => item.date === date).length;
-  };
+  const combinedData = combineData().map((item) => {
+    const total = item.solved + item.unsolved;
+    return {
+      ...item,
+      color: getSeverityColor(total),
+    };
+  });
 
-  const countUnsolvedAccidentsOnDate = (date) => {
-    return unSolvedAccidentData.filter((item) => item.date === date).length;
-  };
-
-  const countSolvedArsonsOnDate = (date) => {
-    return solvedArsonData.filter((item) => item.date === date).length;
-  };
-  
-  const countUnsolvedArsonsOnDate = (date) => {
-    return unSolvedArsonData.filter((item) => item.date === date).length;
-  };
-  
-  const countSolvedHazardsOnDate = (date) => {
-    return solvedHazardData.filter((item) => item.date === date).length;
-  };
-  
-  const countUnsolvedHazardsOnDate = (date) => {
-    return unSolvedHazardData.filter((item) => item.date === date).length;
-  };
-
-  const totalCrime = crimeData.length;
-  const totalAccident = accidentData.length;
-  const totalArson = arsonData.length;
-  const totalHazard = hazardData.length;
-
-  const totalSolvedCrime = crimeData.filter(
-    (crime) => crime.action_status === "Solved"
-  ).length;
-
-  const totalSolvedAccident = accidentData.filter(
-    (crime) => crime.action_status === "Solved"
-  ).length;
-
-  const totalSolvedArson = arsonData.filter(
-    (crime) => crime.action_status === "Solved"
-  ).length;
-
-  const totalSolvedHazard = hazardData.filter(
-    (crime) => crime.action_status === "Solved"
-  ).length;
-
-  const totalOngoingCrimes = crimeData.filter(
-    (crime) => crime.action_status === "InProgress" || crime.action_status === "Pending"
-  ).length;
-  
-  const totalOngoingAccident = accidentData.filter(
-    (crime) => crime.action_status === "InProgress" || crime.action_status === "Pending"
-  ).length;
-  
-  const totalOngoingArson = arsonData.filter(
-    (crime) => crime.action_status === "InProgress" || crime.action_status === "Pending"
-  ).length;
-  
-  const totalOngoingHazard = hazardData.filter(
-    (crime) => crime.action_status === "InProgress" || crime.action_status === "Pending"
-  ).length;
-  
   return (
     <main className="p-2">
       <div className="main-title font-semibold mb-2 mt-4">
-        <h3 className="text-white">Admin Dashboard</h3>
+        <h3>Admin Dashboard</h3>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
         <ReportCard
           label="Accident"
-          totalReport={totalAccident}
-          totalSolvedReport={totalSolvedAccident}
-          totalOngoingReports={totalOngoingAccident}
+          totalReport={totalReports("Accident")}
+          totalSolvedReport={totalSolvedReports("Accident")}
+          totalOngoingReports={totalOngoingReports("Accident")}
         />
-
         <ReportCard
           label="Arson"
-          totalReport={totalArson}
-          totalSolvedReport={totalSolvedArson}
-          totalOngoingReports={totalOngoingArson}
+          totalReport={totalReports("Arson/Fire")}
+          totalSolvedReport={totalSolvedReports("Arson/Fire")}
+          totalOngoingReports={totalOngoingReports("Arson/Fire")}
         />
-
         <ReportCard
           label="Crime"
-          totalReport={totalCrime}
-          totalSolvedReport={totalSolvedCrime}
-          totalOngoingReports={totalOngoingCrimes}
+          totalReport={totalReports("Crime")}
+          totalSolvedReport={totalSolvedReports("Crime")}
+          totalOngoingReports={totalOngoingReports("Crime")}
         />
-
         <ReportCard
           label="Hazard"
-          totalReport={totalHazard}
-          totalSolvedReport={totalSolvedHazard}
-          totalOngoingReports={totalOngoingHazard}
+          totalReport={totalReports("Hazards")}
+          totalSolvedReport={totalSolvedReports("Hazards")}
+          totalOngoingReports={totalOngoingReports("Hazards")}
         />
       </div>
-      <div className="text-xl font-semibold m-3 text-white">
-        <label htmlFor="filterCriteria">Filter Graph Criteria: </label>
-        <select
-          id="filterCriteria"
-          value={filterCriteria}
-          onChange={(e) => setFilterCriteria(e.target.value)}
-          className="bg-[#191919] text-white rounded p-2"
-        >
-          <option value="month">Month</option>
-          <option value="day">Day</option>
-          <option value="year">Year</option>
-        </select>
-      </div>
 
-      <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-2">
-        <div className="flex flex-col gap-3">
-          <div className="crime-chart bg-[#191919] rounded-lg p-2">
-            <h2 className="text-xl m-2 font-semibold">Crimes</h2>
-            <ResponsiveContainer width="100%" height={400}>
-              <BarChart data={combineData()}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="solvedCrime" name="Solved Crime" fill="#8884d8" />
-                <Bar
-                  dataKey="unSolvedCrime"
-                  name="Unsolved Crime"
-                  fill="#82ca9d"
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="accident-chart bg-[#191919] rounded-lg p-2">
-            <h2 className="text-xl m-2 font-semibold">Accidents</h2>
-            <ResponsiveContainer width="100%" height={400}>
-              <BarChart data={combineData()}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar
-                  dataKey="solvedAccident"
-                  name="Solved Accident"
-                  fill="#8884d8"
-                />
-                <Bar
-                  dataKey="unSolvedAccident"
-                  name="Unsolved Accident"
-                  fill="#82ca9d"
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-        <div className="flex flex-col gap-3">
-          <div className="crime-chart bg-[#191919] rounded-lg p-2">
-            <h2 className="text-xl m-2 font-semibold">Arsons</h2>
-            <ResponsiveContainer width="100%" height={400}>
-              <BarChart data={combineData()}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="solvedArson" name="Solved Arson" fill="#8884d8" />
-                <Bar
-                  dataKey="unSolvedArson"
-                  name="Unsolved Arson"
-                  fill="#82ca9d"
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="accident-chart bg-[#191919] rounded-lg p-2">
-            <h2 className="text-xl m-2 font-semibold">Hazards</h2>
-            <ResponsiveContainer width="100%" height={400}>
-              <BarChart data={combineData()}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar
-                  dataKey="solvedHazard"
-                  name="Solved Hazard"
-                  fill="#8884d8"
-                />
-                <Bar
-                  dataKey="unSolvedHazard"
-                  name="Unsolved Hazard"
-                  fill="#82ca9d"
-                />
-              </BarChart>
-            </ResponsiveContainer>
+      <div className="w-full  border border-gray-600 rounded-lg shadow bg-gray-200 dark:bg-[#191919] dark:border-gray-200 p-2 mt-3">
+        <div className="flex flex-wrap items-center justify-around p-2">
+          <h2 className="text-2xl m-2 font-bold">{reportType} Reports</h2>
+          <div className="text-xl font-bold">
+            <label htmlFor="filterCriteria">Filter Graph Criteria: </label>
+            <select
+              id="filterCriteria"
+              value={filterCriteria}
+              onChange={(e) => setFilterCriteria(e.target.value)}
+              className="bg-gray-400 dark:bg-[#2e2e2e] rounded p-2"
+            >
+              <option value="month">Month</option>
+              <option value="day">Day</option>
+              <option value="year">Year</option>
+            </select>
+            <label htmlFor="reportType" className="ml-4">
+              Report Type:{" "}
+            </label>
+            <select
+              id="reportType"
+              value={reportType}
+              onChange={(e) => setReportType(e.target.value)}
+              className="bg-gray-400 dark:bg-[#2e2e2e] rounded p-2"
+            >
+              <option value="Crime">Crime</option>
+              <option value="Accident">Accident</option>
+              <option value="Hazards">Hazard</option>
+              <option value="Arson/Fire">Arson/Fire</option>
+            </select>
+            <label htmlFor="reportType" className="ml-4">
+              Filter Location:{" "}
+            </label>
+            <select
+              id="filterLocation"
+              value={selectedLocation}
+              onChange={(e) => setSelectedLocation(e.target.value)}
+              className="bg-gray-400 dark:bg-[#2e2e2e] rounded p-2"
+            >
+              <option value="All">All</option>
+              {locations.map((location) => (
+                <option key={location} value={location}>
+                  {location}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
+
+        <ResponsiveContainer width="100%" height={600}>
+          <BarChart data={combinedData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="date" />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="solved" name="Solved">
+              {combinedData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={entry.color} />
+              ))}
+            </Bar>
+            <Bar dataKey="unsolved" name="Unsolved">
+              {combinedData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={entry.color} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
       </div>
     </main>
   );

@@ -18,6 +18,7 @@ const Crime = () => {
     `${import.meta.env.VITE_CRS_API_KEY}/api/reports/crimes`
   );
 
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");

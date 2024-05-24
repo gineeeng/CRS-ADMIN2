@@ -6,7 +6,7 @@ const SearchBar = ({ searchQuery, setSearchQuery }) => {
         placeholder="Search..."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        className="min-w-full px-5 py-2 fs-5 rounded-lg text-lg bg-[#191919]"
+        className="min-w-full px-5 py-2 fs-5 rounded-lg text-lg bg-gray-200 dark:bg-[#191919]"
       />
     </div>
   );

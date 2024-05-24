@@ -13,13 +13,13 @@ const UserDataTable = ({ data, userStatus, updateUserStatus }) => {
   
   return (
     <div className="overflow-x-auto mt-4 justify-center min-h-screen">
-      <table className="table justify-center bg-[#191919]">
+      <table className="table justify-center bg-gray-200 dark:bg-[#191919]">
       <thead>
           <tr>
             {headers.map((header, index) => (
               <th
                 key={index}
-                className="text-white text-lg font-semibold text-center"
+                className="text-gray-600 dark:text-white text-lg font-semibold text-center"
               >
                 {header}
               </th>
@@ -29,10 +29,10 @@ const UserDataTable = ({ data, userStatus, updateUserStatus }) => {
         <tbody>
           {data.map((user, index) => (
             <tr key={user._id}>
-              <td className="text-white text-md font-base text-center">{index + 1}</td>
-              <td className="text-white text-md font-base text-center">{user.name}</td>
-              <td className="text-white text-md font-base text-center">{user.contact_no}</td>
-              <td className="text-white text-md font-base text-center">
+              <td className="text-gray-600 dark:text-white text-md font-base text-center">{index + 1}</td>
+              <td className="text-gray-600 dark:text-white text-md font-base text-center">{user.name}</td>
+              <td className="text-gray-600 dark:text-white text-md font-base text-center">{user.contact_no}</td>
+              <td className="text-gray-600 dark:text-white text-md font-base text-center">
                 {`${
                   user.address.houseNumber ? `#${user.address.houseNumber}, ` : ''
                 } ${
@@ -58,11 +58,11 @@ const UserDataTable = ({ data, userStatus, updateUserStatus }) => {
                   className="px-2 py-1 fs-5 rounded-lg text-md"
                 />
               </td>
-              <td className="text-white text-md font-base text-center flex items-center justify-center">
+              <td className="text-gray-600 dark:text-white text-md font-base text-center flex items-center justify-center">
                 <Link
                   to={`${user._id}`}
                   className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 
-                    focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 
+                    focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-gray-600 dark:text-white dark:border-gray-600 
                     dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
                 >
                   View

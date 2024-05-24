@@ -1,13 +1,11 @@
 import Welcome from "../pages/Welcome";
-import Accident from "../pages/Accident";
-import Crime from "../pages/Crime";
 import Dashboard from "../pages/Dashboard";
 import Login from "../pages/Login";
 import User from "../pages/User";
 import FindUser from "../pages/FindUser";
-import Arson from "../pages/Arson";
-import Hazards from "../pages/Hazards";
 import Archive from "../pages/Archive";
+import Reports from "../pages/Reports";
+import Settings from "../pages/Settings";
 
 export const mainRoutes = [
   {
@@ -23,20 +21,8 @@ export const mainRoutes = [
         element: <Welcome/>,
       },
       {
-        path: "accident",
-        element: <Accident />,
-      },
-      {
-        path: "arson",
-        element: <Arson />,
-      },
-      {
-        path: "hazard",
-        element: <Hazards />,
-      },
-      {
-        path: "crime",
-        element: <Crime />,
+        path: "reports",
+        element: <Reports />,
       },
       {
         path: "user",
@@ -49,6 +35,10 @@ export const mainRoutes = [
       {
         path: "archive",
         element: <Archive/>,
+      },
+      {
+        path: "settings",
+        element: <Settings/>,
       },
     ],
   },

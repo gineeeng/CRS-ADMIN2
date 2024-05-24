@@ -1,4 +1,5 @@
 import axios from 'axios';
+import sendEmail from '../utils/sendEmail';
 
 const useUpdateActionStatus = (data, actionStatus, setActionStatus, token, toast) => {
   const updateActionStatus = (index, newStatus) => {
@@ -15,7 +16,15 @@ const useUpdateActionStatus = (data, actionStatus, setActionStatus, token, toast
           },
         }
       )
-      .then(() => {
+      .then(async () => {
+        await sendEmail({
+          to_email: email,
+          subject: "Report Status in Crime Reporting System",
+          message: `
+          We are pleased to inform you that your report's status changes to ${newStatus}.
+          
+          Thank you for cooperation.`,
+        });      
         toast.success(`Status updated to ${newStatus} successfully!`);
         setActionStatus(updatedStatus);
       })

@@ -2,33 +2,18 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+import useFetchData from "../hooks/useFetchData";
+import Loader from "../components/Loader";
 import axios from "axios";
 import Cookies from "js-cookie";
 
 const FindUser = () => {
   const { id } = useParams();
-  const [user, setUser] = useState("");
-  const [reports, setReports] = useState([]);
   const token = Cookies.get("token");
-  const [reportedCrimes, setReportedCrimes] = useState([]);
-  const [reportedSolvedCrimes, setReportedSolvedCrimes] = useState([]);
-  const [reportedUnsolvedCrimes, setReportedUnsolvedCrimes] = useState([]);
-  const [reportedAccidents, setReportedAccidents] = useState([]);
-  const [reportedSolvedAccidents, setReportedSolvedAccidents] = useState([]);
-  const [reportedUnsolvedAccidents, setReportedUnsolvedAccidents] = useState(
-    []
+  const [user, setUser] = useState("");
+  const { data: reports, loading: reportLoading } = useFetchData(
+    `${import.meta.env.VITE_CRS_API_KEY}/api/users/${id}/reports`
   );
-
-  useEffect(() => {
-    getUserInfo();
-    getReports();
-    getReportedCrimes();
-    getReportedSolvedCrimes();
-    getReportedUnsolvedCrimes();
-    getReportedAccidents();
-    getReportedSolvedAccidents();
-    getReportedUnsolvedAccidents();
-  }, []);
 
   const getUserInfo = () => {
     axios
@@ -45,124 +30,22 @@ const FindUser = () => {
       });
   };
 
-  const getReports = () => {
-    axios
-      .get(`${import.meta.env.VITE_CRS_API_KEY}/api/users/${id}/reports`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        setReports(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching reports", error);
-      });
-  };
+  useEffect(() => {
+    getUserInfo();
+  }, []);
 
-  const getReportedCrimes = () => {
-    axios
-      .get(`${import.meta.env.VITE_CRS_API_KEY}api/users/${id}/crime`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        setReportedCrimes(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching reported crimes:", error);
-      });
-  };
+  const reported = reports.length;
+  const reportedSolved = reports.filter(
+    (report) => report.action_status === "Solved"
+  ).length;
+  const reportedUnsolved = reports.filter(
+    (report) => report.action_status !== "Solved"
+  ).length;
 
-  const getReportedSolvedCrimes = () => {
-    axios
-      .get(`${import.meta.env.VITE_CRS_API_KEY}/api/users/${id}/crime/solved`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        setReportedSolvedCrimes(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching reported solved crimes:", error);
-      });
-  };
-
-  const getReportedUnsolvedCrimes = () => {
-    axios
-      .get(
-        `${import.meta.env.VITE_CRS_API_KEY}/api/users/${id}/crime/unsolved`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((response) => {
-        setReportedUnsolvedCrimes(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching reported unsolved crimes:", error);
-      });
-  };
-
-  const getReportedAccidents = () => {
-    axios
-      .get(`${import.meta.env.VITE_CRS_API_KEY}/api/users/${id}/accident`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        setReportedAccidents(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching reported accidents:", error);
-      });
-  };
-
-  const getReportedSolvedAccidents = () => {
-    axios
-      .get(
-        `${import.meta.env.VITE_CRS_API_KEY}/api/users/${id}/accident/solved`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((response) => {
-        setReportedSolvedAccidents(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching reported solved accidents:", error);
-      });
-  };
-
-  const getReportedUnsolvedAccidents = () => {
-    axios
-      .get(
-        `${import.meta.env.VITE_CRS_API_KEY}/api/users/${id}/accident/unsolved`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((response) => {
-        setReportedUnsolvedAccidents(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching reported unsolved accidents:", error);
-      });
-  };
+  if (reportLoading) return <Loader />;
 
   return (
-    <div className="container mx-auto text-white">
-      <h1 className="text-3xl font-semibold mb-4">User Information</h1>
-
+    <div className=" mx-auto mt-4 p-2">
       <div className="mb-4 flex items-center gap-4">
         <img
           className="rounded-full w-20 h-20 object-cover"
@@ -171,6 +54,7 @@ const FindUser = () => {
               ? user.profilePic
               : "https://cvhrma.org/wp-content/uploads/2015/07/default-profile-photo.jpg"
           }
+          alt="Profile"
         />
         <div>
           <h1 className="text-5xl font-bold flex items-center mb-2">
@@ -186,112 +70,96 @@ const FindUser = () => {
       </div>
 
       <div className="mb-2">
-        <h1 className="text-2xl font-bold">Reported Crimes</h1>
-        <div className="flex flex-wrap gap-2 mt-2 text-white">
-          <div className="bg-[#191919] rounded-lg p-3 text-dark">
-            <h2 className="text-2xl font-bold">Total Reported Crimes</h2>
-            <p>{reportedCrimes.length}</p>
+        <div className="flex flex-wrap gap-2 mt-2">
+          <div className="bg-gray-200 dark:bg-[#2e2e2e] rounded-lg p-3 text-dark">
+            <h2 className="text-2xl font-bold">Total Reported Incidents</h2>
+            <p>{reported}</p>
           </div>
-          <div className="bg-[#191919] rounded-lg p-3 text-dark">
-            <h2 className="text-2xl font-bold">Total Reported Solved Crimes</h2>
-            <p>{reportedSolvedCrimes.length}</p>
+          <div className="bg-gray-200 dark:bg-[#2e2e2e] rounded-lg p-3 text-dark">
+            <h2 className="text-2xl font-bold">
+              Total Reported Solved Incidents
+            </h2>
+            <p>{reportedSolved}</p>
           </div>
-          <div className="bg-[#191919] rounded-lg p-3 text-dark">
-            <h2 className="text-2xl font-bold">Total Reported Solved Crimes</h2>
-            <p>{reportedUnsolvedCrimes.length}</p>
+          <div className="bg-gray-200 dark:bg-[#2e2e2e] rounded-lg p-3 text-dark">
+            <h2 className="text-2xl font-bold">
+              Total Reported Unsolved Incidents
+            </h2>
+            <p>{reportedUnsolved}</p>
           </div>
         </div>
       </div>
 
-      <div>
-        <h1 className="text-2xl font-bold">Reported Accidents</h1>
-        <div className="flex flex-wrap gap-2 mt-2 text-white">
-          <div className="bg-[#191919] rounded-lg p-3 text-dark">
-            <h2 className="text-2xl font-bold">Total Reported Accidents</h2>
-            <p>{reportedAccidents.length}</p>
-          </div>
-          <div className="bg-[#191919] rounded-lg p-3 text-dark">
-            <h2 className="text-2xl font-bold">
-              Total Reported Solved Accidents
-            </h2>
-            <p>{reportedSolvedAccidents.length}</p>
-          </div>
-          <div className="bg-[#191919] rounded-lg p-3 text-dark">
-            <h2 className="text-2xl font-bold">
-              Total Reported Solved Accidents
-            </h2>
-            <p>{reportedUnsolvedAccidents.length}</p>
-          </div>
-        </div>
-      </div>
-      <div className="grid grid-cols-2 gap-6 mt-4">
+      <div className="flex flex-wrap gap-2">
         {reports.map((report, index) => (
-          <div key={index} className="p-4 border rounded-lg shadow-md">
-            <div className="text-xl font-semibold mb-2">
-              {report.reportType} | {report.type}
+          <div key={index} className="w-full p-4 border rounded-lg shadow-md max-w-[500px]">
+            <div className="flex gap-2 justify-between items-center mb-2">
+              <div className="text-xl font-semibold">
+                {report.reportType} | {report.type}{" "}
+              </div>
+              <div
+                className={`px-3 py-1 rounded-md ${
+                  report.action_status === "Solved"
+                    ? "bg-green-500"
+                    : "bg-red-500"
+                } text-white font-bold text-xl`}
+              >
+                {report.action_status}
+              </div>
             </div>
-            <div
-              className={`px-3 py-1 rounded-md ${
-                report.action_status === "Solved"
-                  ? "bg-green-500"
-                  : "bg-red-500"
-              } text-white font-bold text-xl mb-4`}
-            >
-              {report.action_status}
-            </div>
-            <div>
-              {report.photoURL && (
-                <Swiper
-                  spaceBetween={50}
-                  slidesPerView={1}
-                  onSlideChange={() => console.log("slide change")}
-                  onSwiper={(swiper) => console.log(swiper)}
-                >
-                  {report.photoURL.map((url, index) => (
-                    <SwiperSlide key={index}>
-                      <img
-                        src={url}
-                        alt={`Accident ${index + 1}`}
-                        className="w-full object-cover rounded-md"
-                        style={{ maxHeight: 300 }}
-                      />
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
-              )}
-              {report.videoURL && (
-                <video controls className="rounded-md w-full"   style={{ maxHeight: 300 }}>
-                  <source
-                    src={report.videoURL}
-                    type="video/mp4"
-                  
-                  />
-                  Your browser does not support the video tag.
-                </video>
-              )}
-              <h3 className="font-bold text-2xl mt-2 mb-4">
-                {report.description}
-              </h3>
-              <p>
-                <span className="font-semibold">Location:</span>{" "}
-                {`${report.location.barangay}, ${report.location.municipality}`}
-              </p>
-              <p>
-                <span className="font-semibold">Number of Casualties:</span>{" "}
-                {report.numberOfCasualties ? report.numberOfCasualties : "none"}
-              </p>
-              <p>
-                <span className="font-semibold">Number of Injuries:</span>{" "}
-                {report.numberOfInjuries ? report.numberOfInjuries : "none"}
-              </p>
-              <p>
-                <span className="font-semibold">Number of Casualties:</span>{" "}
-                {report.numberOfCasualties ? report.numberOfCasualties : "none"}
-              </p>
-              <p>
-                <span className="font-semibold">Injury Severity:</span>{" "}
-                {report.injurySeverity ? report.injurySeverity : "none"}
-              </p>
+            {report.videoURL && (
+              <video
+                controls
+                className="rounded-md w-full mb-2"
+                style={{ maxHeight: 300 }}
+              >
+                <source src={report.videoURL} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            )}
+            {report.photoURL && (
+              <Swiper
+                spaceBetween={50}
+                slidesPerView={1}
+                onSlideChange={() => console.log("slide change")}
+                onSwiper={(swiper) => console.log(swiper)}
+              >
+                {report.photoURL.map((url, index) => (
+                  <SwiperSlide key={index}>
+                    <img
+                      src={url}
+                      alt={`Accident ${index + 1}`}
+                      className="w-full object-cover rounded-md mb-2"
+                      style={{ maxHeight: 300 }}
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            )}
+            <div className="w-full flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-white  dark:bg-[#191919] dark:hover:bg-[#151515]">
+              <div className="flex flex-col justify-between p-4 leading-normal">
+                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                  {report.description}
+                </h5>
+                <p>
+                  <span className="font-semibold">Location:</span>{" "}
+                  {`${report.location.barangay}, ${report.location.municipality}`}
+                </p>
+                <p>
+                  <span className="font-semibold">Number of Casualties:</span>{" "}
+                  {report.numberOfCasualties
+                    ? report.numberOfCasualties
+                    : "none"}
+                </p>
+                <p>
+                  <span className="font-semibold">Number of Injuries:</span>{" "}
+                  {report.numberOfInjuries ? report.numberOfInjuries : "none"}
+                </p>
+                <p>
+                  <span className="font-semibold">Injury Severity:</span>{" "}
+                  {report.injurySeverity ? report.injurySeverity : "none"}
+                </p>
+              </div>
             </div>
           </div>
         ))}

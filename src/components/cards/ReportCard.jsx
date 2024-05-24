@@ -1,6 +1,8 @@
+import { useContext } from "react";
 import { MdOutlineLocalPolice } from "react-icons/md";
 import { VictoryPie, VictoryLabel } from "victory";
 import { ResponsiveContainer } from "recharts";
+import { ThemeContext } from "../../ThemeContext";
 
 const ReportCard = ({
   label,
@@ -8,13 +10,21 @@ const ReportCard = ({
   totalSolvedReport,
   totalOngoingReports,
 }) => {
+  const { theme } = useContext(ThemeContext);
+  const labelColor = theme === "dark" ? "white" : "#4b5563";
+
   return (
-    <div className="card bg-[#191919]">
+    <div className="card p-6  border border-gray-600 rounded-lg shadow bg-gray-200 dark:bg-[#191919] dark:border-gray-200">
       <div className="card-inner">
-        <h3 className="text-2xl font-bold">{label} Reported</h3>
-        <MdOutlineLocalPolice className="card_icon" />
+        <div className="flex items-center gap-2">
+          <MdOutlineLocalPolice size={40} />
+
+          <h3 className="text-3xl font-semibold tracking-tight">
+            {label} Reported
+          </h3>
+        </div>
+        <h1 className="text-3xl font-bold">{totalReport}</h1>
       </div>
-      <h1 className="text-2xl font-bold">{totalReport}</h1>
       <ResponsiveContainer height={300}>
         <VictoryPie
           data={[
@@ -29,10 +39,10 @@ const ReportCard = ({
               label: `Unsolved: ${totalOngoingReports}`,
             },
           ]}
-          colorScale={["tomato", "orange", "gold", "cyan", "navy"]}
+          colorScale={["#4d7c0f", "#eab308"]}
           labelComponent={
             <VictoryLabel
-              style={{ fontSize: 18, fontWeight: "bold", fill: "white" }}
+              style={{ fontSize: 18, fontWeight: "bold", fill: labelColor }}
             />
           }
         />
