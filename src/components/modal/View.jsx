@@ -11,7 +11,6 @@ const View = ({ id, userId }) => {
   const [reportsDetails, setReportsDetails] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
 
-
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
@@ -19,7 +18,7 @@ const View = ({ id, userId }) => {
   useEffect(() => {
     if (modal) {
       fetchReports();
-      fetchUser()
+      fetchUser();
     }
   }, [token, modal, id]);
 
@@ -33,7 +32,7 @@ const View = ({ id, userId }) => {
           },
         }
       );
-      setReportsDetails(response.data)
+      setReportsDetails(response.data);
     } catch (error) {
       console.error("Error fetching Reports details:", error);
     }
@@ -93,38 +92,36 @@ const View = ({ id, userId }) => {
                     </div>
                   </div>
 
-                  <div style={{ height: 300, overflow: "hidden" }}>
-                    {reportsDetails.photoURL && (
-                      <Swiper
-                        spaceBetween={50}
-                        slidesPerView={1}
-                        onSwiper={(swiper) => console.log(swiper)}
-                        style={{ width: "100%", height: "100%" }}
-                      >
-                        {reportsDetails.photoURL.map((url, index) => (
-                          <SwiperSlide
-                            key={index}
+                  {reportsDetails.photoURL && (
+                    <Swiper
+                      spaceBetween={50}
+                      slidesPerView={1}
+                      onSwiper={(swiper) => console.log(swiper)}
+                    >
+                      {reportsDetails.photoURL.map((url, index) => (
+                        <SwiperSlide
+                          key={index}
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <img
+                            src={url}
+                            alt={`Reports ${index + 1}`}
+                            className="rounded-md"
                             style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
+                              width: "100%",
+                              maxHeight: "100%",
+                              objectFit: "cover",
                             }}
-                          >
-                            <img
-                              src={url}
-                              alt={`Reports ${index + 1}`}
-                              className="rounded-md"
-                              style={{
-                                width: "100%",
-                                maxHeight: "100%",
-                                objectFit: "cover",
-                              }}
-                            />
-                          </SwiperSlide>
-                        ))}
-                      </Swiper>
-                    )}
-                  </div>
+                          />
+                        </SwiperSlide>
+                      ))}
+                    </Swiper>
+                  )}
+                  
                   {reportsDetails.videoURL && (
                     <video
                       className="w-full "
@@ -136,7 +133,7 @@ const View = ({ id, userId }) => {
                   )}
 
                   <h3 className="font-bold text-2xl">
-                  {`${reportsDetails.location.barangay}, ${reportsDetails.location.municipality}`}
+                    {`${reportsDetails.location.barangay}, ${reportsDetails.location.municipality}`}
                   </h3>
 
                   <p>
@@ -165,8 +162,7 @@ const View = ({ id, userId }) => {
                   </p>
 
                   <p>
-                    Reported by:{" "}
-                    {userDetails ? userDetails.name : "loading"}
+                    Reported by: {userDetails ? userDetails.name : "loading"}
                   </p>
                 </div>
               </div>

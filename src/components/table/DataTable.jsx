@@ -49,7 +49,7 @@ const DataTable = ({ data, actionStatus, updateActionStatus }) => {
                 })}
               </td>
               <td className="text-gray-600 dark:text-white text-md font-base text-center">
-                {`${item.location.barangay}, ${item.location.municipality}`}
+                {`${item.location.street}`}
               </td>
               <td className="text-black text-md font-base text-center">
                 <Select
@@ -63,7 +63,7 @@ const DataTable = ({ data, actionStatus, updateActionStatus }) => {
                     label: actionStatus[index] || "Under Investigation",
                   }}
                   onChange={(selectedOption) =>
-                    updateActionStatus(index, selectedOption.value)
+                    updateActionStatus(item._id, index, selectedOption.value)
                   }
                   className="px-2 py-1 fs-5 rounded-lg text-md"
                 />

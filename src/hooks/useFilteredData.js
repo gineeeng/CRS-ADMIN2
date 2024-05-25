@@ -22,7 +22,7 @@ const useFilteredData = (data, searchQuery, selectedLocation, selectedMonth, sel
 
         const matchesLocation =
           !selectedLocation ||
-          `${item.location.barangay}, ${item.location.municipality}` === selectedLocation;
+          `${item.location.street}` === selectedLocation;
 
         const matchesMonth = !selectedMonth || crimeMonth === selectedMonth;
 

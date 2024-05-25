@@ -118,7 +118,7 @@ const Settings = () => {
               name="name"
               value={adminInfo.name}
               onChange={handleChange}
-              className="mt-1 p-2 w-full border rounded dark:bg-[#2e2e2e] dark:border-white"
+              className="mt-1 p-2 w-full border rounded bg-gray-200 dark:bg-[#2e2e2e] dark:border-white"
               required
             />
           </div>
@@ -129,7 +129,7 @@ const Settings = () => {
               name="email"
               value={adminInfo.email}
               onChange={handleChange}
-              className="mt-1 p-2 w-full border rounded dark:bg-[#2e2e2e] dark:border-white"
+              className="mt-1 p-2 w-full border rounded bg-gray-200 dark:bg-[#2e2e2e] dark:border-white"
               required
             />
           </div>
@@ -153,7 +153,7 @@ const Settings = () => {
                 name="oldPassword"
                 value={passwords.oldPassword}
                 onChange={handlePasswordChange}
-                className="mt-1 p-2 w-full border rounded dark:bg-[#2e2e2e] dark:border-white"
+                className="mt-1 p-2 w-full border rounded bg-gray-200 dark:bg-[#2e2e2e] dark:border-white"
                 required
               />
               <button
@@ -173,7 +173,7 @@ const Settings = () => {
                 name="newPassword"
                 value={passwords.newPassword}
                 onChange={handlePasswordChange}
-                className="mt-1 p-2 w-full border rounded dark:bg-[#2e2e2e] dark:border-white"
+                className="mt-1 p-2 w-full border rounded bg-gray-200 dark:bg-[#2e2e2e] dark:border-white"
                 required
               />
               <button
@@ -193,7 +193,7 @@ const Settings = () => {
                 name="confirmPassword"
                 value={passwords.confirmPassword}
                 onChange={handlePasswordChange}
-                className="mt-1 p-2 w-full border rounded dark:bg-[#2e2e2e] dark:border-white"
+                className="mt-1 p-2 w-full border rounded bg-gray-200 bg-gray-200 dark:bg-[#2e2e2e] dark:border-white "
                 required
               />
               <button

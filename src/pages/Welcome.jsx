@@ -13,37 +13,7 @@ import {
 import ReportCard from "../components/cards/ReportCard";
 import useFetchData from "../hooks/useFetchData";
 import Loader from "../components/Loader";
-
-const locations = [
-  "Bacayao Norte, Dagupan City",
-  "Bacayao Sur, Dagupan City",
-  "Bolosan, Dagupan City",
-  "Bonuan Binloc, Dagupan City",
-  "Bonuan Boquig, Dagupan City",
-  "Bonuan Gueset, Dagupan City",
-  "Calmay, Dagupan City",
-  "Carael, Dagupan City",
-  "Caranglaan, Dagupan City",
-  "Herrero, Dagupan City",
-  "Lasip Chico, Dagupan City",
-  "Lasip Grande, Dagupan City",
-  "Lomboy, Dagupan City",
-  "Lucao, Dagupan City",
-  "Malued, Dagupan City",
-  "Mamalingling, Dagupan City",
-  "Mangin, Dagupan City",
-  "Mayombo, Dagupan City",
-  "Pantal, Dagupan City",
-  "Poblacion Oeste, Dagupan City",
-  "Pogo Chico, Dagupan City",
-  "Pogo Grande, Dagupan City",
-  "Pugaro Suit, Dagupan City",
-  "Salapingao, Dagupan City",
-  "Salisay, Dagupan City",
-  "Tambac, Dagupan City",
-  "Tapuac, Dagupan City",
-  "Tebeng, Dagupan City",
-];
+import { sitioData } from "../mocks/sitioData";
 
 const Welcome = () => {
   const [filterCriteria, setFilterCriteria] = useState("month");
@@ -57,8 +27,7 @@ const Welcome = () => {
 
   const filteredData = data.filter(
     (item) =>
-      selectedLocation === "All" ||
-      `${item.location.barangay}, ${item.location.municipality}` === selectedLocation
+      selectedLocation === "All" || item.location.street === selectedLocation
   );
 
   const combineData = () => {
@@ -153,17 +122,20 @@ const Welcome = () => {
 
   const totalSolvedReports = (type) =>
     filteredData.filter(
-      (item) => item.reportType === type && item.action_status === "Solved"
+      (item) =>
+        (item.reportType === type && item.action_status === "Solved") ||
+        item.action_status === "Case Closed"
     ).length;
 
   const totalOngoingReports = (type) =>
     filteredData.filter(
-      (item) => item.reportType === type && item.action_status !== "Solved"
+      (item) =>
+        item.reportType === type && item.action_status === "Under Investigation"
     ).length;
 
   const getSeverityColor = (count) => {
-    if (count < 3) return "#eab308"; 
-    if (count < 6) return "#4d7c0f"; 
+    if (count < 3) return "#eab308";
+    if (count < 6) return "#4d7c0f";
     return "#dc2626";
   };
 
@@ -177,39 +149,9 @@ const Welcome = () => {
 
   return (
     <main className="p-2">
-      <div className="main-title font-semibold mb-2 mt-4">
+      <div className="main-title font-semibold mt-4 flex flex-wrap items-center mb-2">
         <h3>Admin Dashboard</h3>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
-        <ReportCard
-          label="Accident"
-          totalReport={totalReports("Accident")}
-          totalSolvedReport={totalSolvedReports("Accident")}
-          totalOngoingReports={totalOngoingReports("Accident")}
-        />
-        <ReportCard
-          label="Arson"
-          totalReport={totalReports("Arson/Fire")}
-          totalSolvedReport={totalSolvedReports("Arson/Fire")}
-          totalOngoingReports={totalOngoingReports("Arson/Fire")}
-        />
-        <ReportCard
-          label="Crime"
-          totalReport={totalReports("Crime")}
-          totalSolvedReport={totalSolvedReports("Crime")}
-          totalOngoingReports={totalOngoingReports("Crime")}
-        />
-        <ReportCard
-          label="Hazard"
-          totalReport={totalReports("Hazards")}
-          totalSolvedReport={totalSolvedReports("Hazards")}
-          totalOngoingReports={totalOngoingReports("Hazards")}
-        />
-      </div>
-
-      <div className="w-full  border border-gray-600 rounded-lg shadow bg-gray-200 dark:bg-[#191919] dark:border-gray-200 p-2 mt-3">
-        <div className="flex flex-wrap items-center justify-around p-2">
-          <h2 className="text-2xl m-2 font-bold">{reportType} Reports</h2>
+        <div>
           <div className="text-xl font-bold">
             <label htmlFor="filterCriteria">Filter Graph Criteria: </label>
             <select
@@ -246,12 +188,70 @@ const Welcome = () => {
               className="bg-gray-400 dark:bg-[#2e2e2e] rounded p-2"
             >
               <option value="All">All</option>
-              {locations.map((location) => (
+              {sitioData.map((location) => (
                 <option key={location} value={location}>
                   {location}
                 </option>
               ))}
             </select>
+          </div>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
+        <ReportCard
+          label="Accident"
+          totalReport={totalReports("Accident")}
+          totalSolvedReport={totalSolvedReports("Accident")}
+          totalOngoingReports={totalOngoingReports("Accident")}
+        />
+        <ReportCard
+          label="Arson"
+          totalReport={totalReports("Arson/Fire")}
+          totalSolvedReport={totalSolvedReports("Arson/Fire")}
+          totalOngoingReports={totalOngoingReports("Arson/Fire")}
+        />
+        <ReportCard
+          label="Crime"
+          totalReport={totalReports("Crime")}
+          totalSolvedReport={totalSolvedReports("Crime")}
+          totalOngoingReports={totalOngoingReports("Crime")}
+        />
+        <ReportCard
+          label="Hazard"
+          totalReport={totalReports("Hazards")}
+          totalSolvedReport={totalSolvedReports("Hazards")}
+          totalOngoingReports={totalOngoingReports("Hazards")}
+        />
+      </div>
+
+      <div className="w-full  border border-gray-600 rounded-lg shadow bg-gray-200 dark:bg-[#191919] dark:border-gray-200 p-2 mt-3">
+        <div className="flex flex-wrap items-center justify-around p-2">
+          <h2 className="text-2xl m-2 font-bold">{reportType} Reports</h2>
+          <div className="flex items-center justify-center">
+            <div className="text-xl m-2 font-semibold">
+              Unsolved Reports:{" "}
+              {
+                filteredData.filter(
+                  (data) => data.action_status === "Under Investigation"
+                ).length
+              }
+            </div>
+            <div className="text-xl m-2 font-semibold">
+              Solved Reports:{" "}
+              {
+                filteredData.filter(
+                  (data) =>
+                    data.action_status === "Solved" ||
+                    data.action_status === "Case Closed"
+                ).length
+              }
+            </div>
+            <div className="text-xl m-2 font-semibold">
+              Total Reports:{" "}
+              {
+                filteredData.length
+              }
+            </div>
           </div>
         </div>
 

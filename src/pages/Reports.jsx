@@ -14,7 +14,6 @@ import ReadyToPrintTable from "../components/table/ReadyToPrintTable";
 import SelectCategory from "../components/select/SelectCategory";
 
 const Reports = () => {
-  const token = Cookies.get("token");
   const { data, loading } = useFetchData(
     `${import.meta.env.VITE_CRS_API_KEY}/api/reports`
   );
@@ -26,14 +25,8 @@ const Reports = () => {
   const [selectedTab, setSelectedTab] = useState("All");
   const [actionStatus, setActionStatus] = useState([]);
 
-  const updateActionStatus = useUpdateActionStatus(
-    data,
-    actionStatus,
-    setActionStatus,
-    token,
-    toast
-  );
-  
+  const updateActionStatus = useUpdateActionStatus(actionStatus, setActionStatus);
+
   const filteredData = useFilteredData(
     data,
     searchQuery,
@@ -45,9 +38,7 @@ const Reports = () => {
 
   useEffect(() => {
     if (filteredData) {
-      const initialActionStatus = filteredData.map(
-        (data) => data.action_status
-      );
+      const initialActionStatus = filteredData.map((item) => item.action_status);
       setActionStatus(initialActionStatus);
     }
   }, [filteredData]);

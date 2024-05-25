@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import { saveAs } from "file-saver";
 import {
@@ -15,7 +15,7 @@ import PrintTable from "./PrintTable";
 
 const ReadyToPrintTable = ({ data }) => {
   const componentRef = useRef();
-
+  const [isVisible, setIsVisible] = useState(false);
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
@@ -23,8 +23,8 @@ const ReadyToPrintTable = ({ data }) => {
   const headers = [
     "ID",
     "Type",
-    "No. of casualties",
-    "No. of Injuries",
+    "Casualties",
+    "Injuries",
     "Injury Severity",
     "Date",
     "Location",
@@ -158,8 +158,10 @@ const ReadyToPrintTable = ({ data }) => {
     });
   };
 
-  const handlePdf = () => {
-    generatePDF(componentRef , { filename: "ReportsTable.pdf" })
+  const handlePdf =  async () => {
+    setIsVisible(true)
+    await generatePDF(componentRef , { filename: "ReportsTable.pdf" })
+    await setIsVisible(false)
   }
 
   return (
@@ -183,7 +185,7 @@ const ReadyToPrintTable = ({ data }) => {
       >
         Download as Word
       </button>
-      <div className="hidden">
+      <div className={`hidden`}>
         <PrintTable headers={headers} data={data} componentRef={componentRef} />
       </div>
     </div>
