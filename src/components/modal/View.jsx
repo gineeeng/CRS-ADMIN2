@@ -198,7 +198,7 @@ const View = ({ id, userId }) => {
         <div className="modal">
           <div className="modal-box bg-yellow-500">
             {reportsDetails && (
-              <div ref={componentRef} className="p-2">
+              <div ref={componentRef} className="w-full   p-2">
                 <div className="text-black">
                   <h1 className="text-2xl">
                     Status: {reportsDetails.action_status}
@@ -206,7 +206,35 @@ const View = ({ id, userId }) => {
                   <div className="text-4xl font-bold mb-2">
                     {reportsDetails.type}
                   </div>
-
+                  {reportsDetails.photoURL && (
+                    <Swiper
+                      spaceBetween={50}
+                      slidesPerView={1}
+                      onSwiper={(swiper) => console.log(swiper)}
+                    >
+                      {reportsDetails.photoURL.map((url, index) => (
+                        <SwiperSlide
+                          key={index}
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <img
+                            src={url}
+                            alt={`Reports ${index + 1}`}
+                            className="rounded-md"
+                            style={{
+                              width: "100%",
+                              maxHeight: "300px",
+                              objectFit: "cover",
+                            }}
+                          />
+                        </SwiperSlide>
+                      ))}
+                    </Swiper>
+                  )}
                   <h3 className="font-bold text-2xl">
                     {`${reportsDetails.location.barangay}, ${reportsDetails.location.municipality}`}
                   </h3>
@@ -256,18 +284,6 @@ const View = ({ id, userId }) => {
                 className="px-5 py-2.5 m-2 rounded-lg text-lg sm:w-fit bg-gray-200 dark:bg-[#191919]"
               >
                 Print
-              </button>
-              <button
-                onClick={handlePdf}
-                className="px-5 py-2.5 m-2 rounded-lg text-lg sm:w-fit bg-gray-200 dark:bg-[#191919]"
-              >
-                PDF
-              </button>
-              <button
-                onClick={handleWord}
-                className="px-5 py-2.5 m-2 rounded-lg text-lg sm:w-fit bg-gray-200 dark:bg-[#191919]"
-              >
-                Word
               </button>
             </div>
           </div>
