@@ -68,11 +68,15 @@ const Reports = () => {
         setSelectedTab={setSelectedTab}
       />
       <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-      <DataTable
-        data={filteredData}
-        actionStatus={actionStatus}
-        updateActionStatus={updateActionStatus}
-      />
+      {filteredData.length === 0 ? (
+        <h1 className="m-2 text-center">No reports available {searchQuery && `for ${searchQuery}`}</h1>
+      ) : (
+        <DataTable
+          data={filteredData}
+          actionStatus={actionStatus}
+          updateActionStatus={updateActionStatus}
+        />
+      )}
     </div>
   );
 };

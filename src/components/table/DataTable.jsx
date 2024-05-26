@@ -63,7 +63,7 @@ const DataTable = ({ data, actionStatus, updateActionStatus }) => {
                     label: actionStatus[index] || "Under Investigation",
                   }}
                   onChange={(selectedOption) =>
-                    updateActionStatus(item._id, index, selectedOption.value)
+                    updateActionStatus(item._id, index, item.userId, selectedOption.value)
                   }
                   className="px-2 py-1 fs-5 rounded-lg text-md"
                 />

@@ -21,7 +21,6 @@ const Archive = () => {
   const [selectedMonth, setSelectedMonth] = useState("");
   const [actionStatus, setActionStatus] = useState([]);
 
-
   const filteredData = useFilteredData(
     data,
     searchQuery,
@@ -40,11 +39,12 @@ const Archive = () => {
 
   useEffect(() => {
     if (filteredData) {
-      const initialActionStatus = filteredData.map((data) => data.action_status);
+      const initialActionStatus = filteredData.map(
+        (data) => data.action_status
+      );
       setActionStatus(initialActionStatus);
     }
   }, [filteredData]);
-
 
   if (loading) return <Loader />;
 
@@ -63,11 +63,15 @@ const Archive = () => {
         <ReadyToPrintTable data={filteredData} />
       </div>
       <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-      <DataTable
-        data={filteredData}
-        actionStatus={actionStatus}
-        updateActionStatus={updateActionStatus}
-      />
+      {filteredData.length === 0 ? (
+        <h1 className="m-2 text-center">No reports available in archives {searchQuery && `for ${searchQuery}`}</h1>
+      ) : (
+        <DataTable
+          data={filteredData}
+          actionStatus={actionStatus}
+          updateActionStatus={updateActionStatus}
+        />
+      )}
     </div>
   );
 };
