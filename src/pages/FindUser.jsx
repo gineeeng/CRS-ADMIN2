@@ -75,18 +75,6 @@ const FindUser = () => {
             <h2 className="text-2xl font-bold">Total Reported Incidents</h2>
             <p>{reported}</p>
           </div>
-          <div className="bg-gray-200 dark:bg-[#2e2e2e] rounded-lg p-3 text-dark">
-            <h2 className="text-2xl font-bold">
-              Total Reported Solved Incidents
-            </h2>
-            <p>{reportedSolved}</p>
-          </div>
-          <div className="bg-gray-200 dark:bg-[#2e2e2e] rounded-lg p-3 text-dark">
-            <h2 className="text-2xl font-bold">
-              Total Reported Unsolved Incidents
-            </h2>
-            <p>{reportedUnsolved}</p>
-          </div>
         </div>
       </div>
 
@@ -95,7 +83,7 @@ const FindUser = () => {
           <div key={index} className="w-full p-4 border rounded-lg shadow-md max-w-[500px]">
             <div className="flex gap-2 justify-between items-center mb-2">
               <div className="text-xl font-semibold">
-                {report.reportType} | {report.type}{" "}
+                {report.type}{" "}
               </div>
               <div
                 className={`px-3 py-1 rounded-md ${

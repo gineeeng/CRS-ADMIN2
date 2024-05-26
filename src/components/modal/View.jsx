@@ -5,7 +5,9 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useReactToPrint } from "react-to-print";
 import { jsPDF } from "jspdf";
-import html2canvas from "html2canvas"
+import { Document, Packer, Paragraph, TextRun } from "docx";
+import { saveAs } from "file-saver";
+
 const View = ({ id, userId }) => {
   const componentRef = useRef();
   const token = Cookies.get("token");
@@ -57,30 +59,117 @@ const View = ({ id, userId }) => {
   };
 
   const handlePdf = async () => {
+    const content = componentRef.current;
+
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "pt",
+      format: "a4",
+    });
+
+    pdf.html(content, {
+      callback: () => {
+        pdf.save("Reports.pdf");
+      },
+      margin: [10, 10, 10, 10],
+      html2canvas: {
+        scale: 1.03,
+      },
+    });
+  };
+
+  const handleWord = async () => {
     try {
-      const content = componentRef.current;
-
-      // Capture content as an image using html2canvas
-      const canvas = await html2canvas(content, { scale: 2 });
-
-      // Convert canvas to base64 image
-      const imageData = canvas.toDataURL('image/jpeg');
-
-      // Add image to PDF using jsPDF
-      const pdf = new jsPDF({
-        orientation: "potrait", // Adjust orientation as needed
-        unit: "px",
-        format: "a4",
+      const doc = new Document({
+        sections: [
+          {
+            properties: {},
+            children: [
+              new Paragraph({
+                children: [
+                  new TextRun({
+                    text: `Status: ${reportsDetails?.action_status || ""}`,
+                    bold: true,
+                    size: 32,
+                    font: "Arial",
+                  }),
+                ],
+              }),
+              new Paragraph({
+                children: [
+                  new TextRun({
+                    text: reportsDetails?.type || "",
+                    bold: true,
+                    size: 40,
+                    font: "Arial",
+                  }),
+                ],
+              }),
+              new Paragraph({
+                children: [
+                  new TextRun({
+                    text: `${reportsDetails?.location?.barangay || ""}, ${
+                      reportsDetails?.location?.municipality || ""
+                    }`,
+                    size: 24,
+                    font: "Arial",
+                  }),
+                ],
+              }),
+              new Paragraph({
+                children: [
+                  new TextRun({
+                    text: `Number of Casualties: ${
+                      reportsDetails?.numberOfCasualties || "none"
+                    }`,
+                    size: 24,
+                    font: "Arial",
+                  }),
+                ],
+              }),
+              new Paragraph({
+                children: [
+                  new TextRun({
+                    text: `Number of Injuries: ${
+                      reportsDetails?.numberOfInjuries || "none"
+                    }`,
+                    size: 24,
+                    font: "Arial",
+                  }),
+                ],
+              }),
+              new Paragraph({
+                children: [
+                  new TextRun({
+                    text: `Injury Severity: ${
+                      reportsDetails?.injurySeverity || "none"
+                    }`,
+                    size: 24,
+                    font: "Arial",
+                  }),
+                ],
+              }),
+              new Paragraph({
+                children: [
+                  new TextRun({
+                    text: `Reported by: ${userDetails?.name || "none"}`,
+                    size: 24,
+                    font: "Arial",
+                  }),
+                ],
+              }),
+            ],
+          },
+        ],
       });
-
-      pdf.addImage(imageData, 'JPEG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
-
-      // Save PDF
-      pdf.save("Reports.pdf");
+  
+      const blob = await Packer.toBlob(doc);
+      saveAs(blob, "Report.docx");
     } catch (error) {
-      console.error("Error generating PDF:", error);
+      console.error("Error creating Word document:", error);
     }
   };
+  
 
   const handleChange = () => {
     setModal(!modal);
@@ -92,7 +181,7 @@ const View = ({ id, userId }) => {
         type="button"
         onClick={handleChange}
         className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 
-        focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-black dark:border-gray-600 
+        focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 m-2 mb-2 dark:bg-gray-800 dark:text-black dark:border-gray-600 
         dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 dark:text-white"
       >
         View
@@ -111,44 +200,12 @@ const View = ({ id, userId }) => {
             {reportsDetails && (
               <div ref={componentRef} className="p-2">
                 <div className="text-black">
-                  <div className="flex gap-2 justify-between">
-                    <div className="text-xl font-semibold mb-2 p-2 rounded-md">
-                      {reportsDetails.type}
-                    </div>
-                    <div className="bg-green-500 flex items-center justify-center text-center text-black text-xl font-bold mb-2 p-2 rounded-md text-white">
-                      {reportsDetails.action_status}
-                    </div>
+                  <h1 className="text-2xl">
+                    Status: {reportsDetails.action_status}
+                  </h1>
+                  <div className="text-4xl font-bold mb-2">
+                    {reportsDetails.type}
                   </div>
-
-                  {reportsDetails.photoURL && (
-                    <Swiper
-                      spaceBetween={50}
-                      slidesPerView={1}
-                      onSwiper={(swiper) => console.log(swiper)}
-                    >
-                      {reportsDetails.photoURL.map((url, index) => (
-                        <SwiperSlide
-                          key={index}
-                          style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                          }}
-                        >
-                          <img
-                            src={url}
-                            alt={`Reports ${index + 1}`}
-                            className="rounded-md"
-                            style={{
-                              width: "100%",
-                              maxHeight: "300px",
-                              objectFit: "cover",
-                            }}
-                          />
-                        </SwiperSlide>
-                      ))}
-                    </Swiper>
-                  )}
 
                   <h3 className="font-bold text-2xl">
                     {`${reportsDetails.location.barangay}, ${reportsDetails.location.municipality}`}
@@ -185,22 +242,33 @@ const View = ({ id, userId }) => {
                 </div>
               </div>
             )}
-            <div className="modal-action">
+            <div className="modal-action flex flex-wrap justify-center items-center">
               <button
                 type="button"
                 onClick={handleChange}
                 className="focus:outline-none text-white text-lg  bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium 
-               rounded-lg px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+               rounded-lg px-5 py-2.5 m-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
               >
                 Close
               </button>
               <button
                 onClick={handlePrint}
-                className="px-5 py-2.5 me-2 mb-2 rounded-lg text-lg sm:w-fit bg-gray-200 dark:bg-[#191919]"
+                className="px-5 py-2.5 m-2 rounded-lg text-lg sm:w-fit bg-gray-200 dark:bg-[#191919]"
               >
                 Print
               </button>
-             
+              <button
+                onClick={handlePdf}
+                className="px-5 py-2.5 m-2 rounded-lg text-lg sm:w-fit bg-gray-200 dark:bg-[#191919]"
+              >
+                PDF
+              </button>
+              <button
+                onClick={handleWord}
+                className="px-5 py-2.5 m-2 rounded-lg text-lg sm:w-fit bg-gray-200 dark:bg-[#191919]"
+              >
+                Word
+              </button>
             </div>
           </div>
         </div>

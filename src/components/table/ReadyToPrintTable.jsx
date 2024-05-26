@@ -11,9 +11,7 @@ import {
   WidthType,
 } from "docx";
 import PrintTable from "./PrintTable";
-import generatePDF from "react-to-pdf";
 import { jsPDF } from "jspdf";
-import html2canvas from "html2canvas";
 
 const ReadyToPrintTable = ({ data }) => {
   const componentRef = useRef();
@@ -138,11 +136,7 @@ const ReadyToPrintTable = ({ data }) => {
                     },
                   }),
                   new TableCell({
-                    children: [
-                      new Paragraph(
-                        `${item.location.barangay}, ${item.location.municipality}`
-                      ),
-                    ],
+                    children:  [new Paragraph(item.street|| "none")],
                     margins: {
                       marginUnitType: WidthType.DXA,
                       top: 100,
