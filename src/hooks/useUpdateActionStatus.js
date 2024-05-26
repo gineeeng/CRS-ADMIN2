@@ -25,7 +25,6 @@ const useUpdateActionStatus = (actionStatus, setActionStatus) => {
           },
         }
       );
-      alert(userResponse.data.email)
       await sendEmail({
         to_email: userResponse.data.email,
         subject: "Report Status in Crime Reporting System",
