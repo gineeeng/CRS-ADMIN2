@@ -10,21 +10,27 @@ import {
   TableRow,
   WidthType,
 } from "docx";
-import generatePDF from "react-to-pdf";
 import PrintTable from "./PrintTable";
+import generatePDF from "react-to-pdf";
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
 
 const ReadyToPrintTable = ({ data }) => {
   const componentRef = useRef();
   const [printLoading, setPrintLoading] = useState(false);
   const [pdfLoading, setPdfLoading] = useState(false);
   const [wordLoading, setWordLoading] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     onBeforePrint: () => setPrintLoading(true),
     onAfterPrint: () => setPrintLoading(false),
     onPrintError: () => setPrintLoading(false),
+    pageStyle: `
+    @page {
+      margin: 4mm;
+    }
+  `,
   });
 
   const headers = [
@@ -161,7 +167,7 @@ const ReadyToPrintTable = ({ data }) => {
         ],
       });
 
-      const doc = await new Document({
+      const doc = new Document({
         sections: [
           {
             children: [table],
@@ -180,50 +186,66 @@ const ReadyToPrintTable = ({ data }) => {
   };
 
   const handlePdf = async () => {
-    setIsVisible(true);
-
     if (pdfLoading) return;
 
     setPdfLoading(true);
 
     try {
-      await generatePDF(componentRef, { filename: "ReportsTable.pdf" });
-      await setIsVisible(false);
+      const content = componentRef.current;
+
+      const pdf = new jsPDF({
+        orientation: "potrait",
+        unit: "pt",
+        format: "a4",
+      });
+
+      pdf.html(content, {
+        callback: () => {
+          pdf.save("ReportsTable.pdf");
+        },
+        margin: [10,10,10,10],
+        html2canvas: {
+            scale: 1.03, 
+        },
+      });
     } catch (error) {
       console.error("Error generating PDF:", error);
     } finally {
       setPdfLoading(false);
-      setIsVisible(false);
     }
   };
 
   return (
     <div>
-      <button
-        onClick={handlePrint}
-        disabled={printLoading}
-        className="px-5 py-2 fs-5 rounded-lg text-lg w-full sm:w-fit bg-gray-200 dark:bg-[#191919]"
-      >
-        {printLoading ? "Printing..." : "Print"}
-      </button>
+      <div className="flex flex-wrap gap-2">
+        <button
+          onClick={handlePrint}
+          disabled={printLoading}
+          className="px-5 py-2 fs-5 rounded-lg text-lg w-full sm:w-fit bg-gray-200 dark:bg-[#191919]"
+        >
+          {printLoading ? "Printing..." : "Print"}
+        </button>
 
-      <button
-        onClick={handlePdf}
-        disabled={pdfLoading}
-        className="px-5 py-2 fs-5 rounded-lg text-lg w-full sm:w-fit bg-gray-200 dark:bg-[#191919] ml-2"
-      >
-        {pdfLoading ? "Downloading..." : "Download as PDF"}
-      </button>
+        <button
+          onClick={() => {
+            handlePdf(null, () => componentRef.current);
+          }}
+          disabled={pdfLoading}
+          className="px-5 py-2 fs-5 rounded-lg text-lg w-full sm:w-fit bg-gray-200 dark:bg-[#191919]"
+        >
+          Download as PDF
+        </button>
 
-      <button
-        onClick={generateWord}
-        disabled={wordLoading}
-        className="px-5 py-2 fs-5 rounded-lg text-lg w-full sm:w-fit bg-gray-200 dark:bg-[#191919] ml-2"
-      >
-        {wordLoading ? "Downloading..." : "Download as Word"}
-      </button>
+        <button
+          onClick={generateWord}
+          disabled={wordLoading}
+          className="px-5 py-2 fs-5 rounded-lg text-lg w-full sm:w-fit bg-gray-200 dark:bg-[#191919]"
+        >
+          {wordLoading ? "Downloading..." : "Download as Word"}
+        </button>
+      </div>
 
-      <div className={`${isVisible ? "block" : "hidden"}`}>
+      <div className="hidden">
         <PrintTable headers={headers} data={data} componentRef={componentRef} />
       </div>
     </div>

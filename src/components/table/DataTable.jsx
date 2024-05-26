@@ -49,7 +49,7 @@ const DataTable = ({ data, actionStatus, updateActionStatus }) => {
                 })}
               </td>
               <td className="text-gray-600 dark:text-white text-md font-base text-center">
-                {`${item.location.street}`}
+                {`${item.location.street || "none"}`}
               </td>
               <td className="text-black text-md font-base text-center">
                 <Select

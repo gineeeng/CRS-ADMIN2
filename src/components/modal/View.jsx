@@ -4,6 +4,8 @@ import "swiper/css";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useReactToPrint } from "react-to-print";
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas"
 const View = ({ id, userId }) => {
   const componentRef = useRef();
   const token = Cookies.get("token");
@@ -54,6 +56,32 @@ const View = ({ id, userId }) => {
     }
   };
 
+  const handlePdf = async () => {
+    try {
+      const content = componentRef.current;
+
+      // Capture content as an image using html2canvas
+      const canvas = await html2canvas(content, { scale: 2 });
+
+      // Convert canvas to base64 image
+      const imageData = canvas.toDataURL('image/jpeg');
+
+      // Add image to PDF using jsPDF
+      const pdf = new jsPDF({
+        orientation: "potrait", // Adjust orientation as needed
+        unit: "px",
+        format: "a4",
+      });
+
+      pdf.addImage(imageData, 'JPEG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
+
+      // Save PDF
+      pdf.save("Reports.pdf");
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+    }
+  };
+
   const handleChange = () => {
     setModal(!modal);
   };
@@ -87,7 +115,7 @@ const View = ({ id, userId }) => {
                     <div className="text-xl font-semibold mb-2 p-2 rounded-md">
                       {reportsDetails.type}
                     </div>
-                    <div className="bg-green-500 text-black text-xl font-bold mb-2 p-2 rounded-md text-white">
+                    <div className="bg-green-500 flex items-center justify-center text-center text-black text-xl font-bold mb-2 p-2 rounded-md text-white">
                       {reportsDetails.action_status}
                     </div>
                   </div>
@@ -113,23 +141,13 @@ const View = ({ id, userId }) => {
                             className="rounded-md"
                             style={{
                               width: "100%",
-                              maxHeight: "100%",
+                              maxHeight: "300px",
                               objectFit: "cover",
                             }}
                           />
                         </SwiperSlide>
                       ))}
                     </Swiper>
-                  )}
-                  
-                  {reportsDetails.videoURL && (
-                    <video
-                      className="w-full "
-                      style={{ maxHeight: 300 }}
-                      controls
-                    >
-                      <source src={reportsDetails.videoURL} />
-                    </video>
                   )}
 
                   <h3 className="font-bold text-2xl">
@@ -182,18 +200,7 @@ const View = ({ id, userId }) => {
               >
                 Print
               </button>
-              <button
-                onClick={handlePrint}
-                className="px-5 py-2.5 me-2 mb-2 rounded-lg text-lg sm:w-fit bg-gray-200 dark:bg-[#191919]"
-              >
-                PDF
-              </button>
-              <button
-                onClick={handlePrint}
-                className="px-5 py-2.5 me-2 mb-2 rounded-lg text-lg sm:w-fit bg-gray-200 dark:bg-[#191919]"
-              >
-                Word
-              </button>
+             
             </div>
           </div>
         </div>
