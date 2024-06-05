@@ -18,17 +18,22 @@ const useFilteredData = (
         const crimeMonth = new Date(item.date).toLocaleString("default", {
           month: "long",
         });
-        const uniqueKey = `${item.type}-${item.date}`;
+        const normalizeDate = (dateString) => {
+          const date = new Date(dateString);
+          return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+        };
+
+        const uniqueKey = `${item.location.street}-${item.reportType}-${normalizeDate(item.date)}`;
 
         if (seen.has(uniqueKey)) {
           return false;
         }
-
         seen.add(uniqueKey);
 
         const matchesSearch = item.location.barangay
           .toLowerCase()
           .includes(searchString);
+
         const matchesLocation =
           !selectedLocation || `${item.location.street}` === selectedLocation;
 

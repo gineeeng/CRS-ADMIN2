@@ -7,6 +7,7 @@ import { useReactToPrint } from "react-to-print";
 import { jsPDF } from "jspdf";
 import { Document, Packer, Paragraph, TextRun } from "docx";
 import { saveAs } from "file-saver";
+import BarangayLogo from "../../assets/logo.png";
 
 const View = ({ id, userId }) => {
   const componentRef = useRef();
@@ -86,6 +87,7 @@ const View = ({ id, userId }) => {
             properties: {},
             children: [
               new Paragraph({
+                alignment: "center",
                 children: [
                   new TextRun({
                     text: `Status: ${reportsDetails?.action_status || ""}`,
@@ -96,6 +98,7 @@ const View = ({ id, userId }) => {
                 ],
               }),
               new Paragraph({
+                alignment: "center",
                 children: [
                   new TextRun({
                     text: reportsDetails?.type || "",
@@ -106,6 +109,7 @@ const View = ({ id, userId }) => {
                 ],
               }),
               new Paragraph({
+                alignment: "center",
                 children: [
                   new TextRun({
                     text: `${reportsDetails?.location?.barangay || ""}, ${
@@ -117,6 +121,7 @@ const View = ({ id, userId }) => {
                 ],
               }),
               new Paragraph({
+                alignment: "center",
                 children: [
                   new TextRun({
                     text: `Number of Casualties: ${
@@ -128,6 +133,7 @@ const View = ({ id, userId }) => {
                 ],
               }),
               new Paragraph({
+                alignment: "center",
                 children: [
                   new TextRun({
                     text: `Number of Injuries: ${
@@ -139,6 +145,7 @@ const View = ({ id, userId }) => {
                 ],
               }),
               new Paragraph({
+                alignment: "center",
                 children: [
                   new TextRun({
                     text: `Injury Severity: ${
@@ -150,6 +157,7 @@ const View = ({ id, userId }) => {
                 ],
               }),
               new Paragraph({
+                alignment: "center",
                 children: [
                   new TextRun({
                     text: `Reported by: ${userDetails?.name || "none"}`,
@@ -162,14 +170,13 @@ const View = ({ id, userId }) => {
           },
         ],
       });
-  
+
       const blob = await Packer.toBlob(doc);
       saveAs(blob, "Report.docx");
     } catch (error) {
       console.error("Error creating Word document:", error);
     }
   };
-  
 
   const handleChange = () => {
     setModal(!modal);
@@ -198,56 +205,58 @@ const View = ({ id, userId }) => {
         <div className="modal">
           <div className="modal-box bg-yellow-500">
             {reportsDetails && (
-              <div ref={componentRef} className="w-full   p-2">
-                <div className="text-black">
-                  <h1 className="text-2xl">
-                    Status: {reportsDetails.action_status}
-                  </h1>
-                  <div className="text-4xl font-bold mb-2">
-                    {reportsDetails.type}
+              <div ref={componentRef} className="w-full p-2 flex flex-col justify-center items-center text-black text-center">
+                <div className="flex flex-col justify-center items-center gap-2 text-black text-xl font-bold mb-10">
+                  <img src={BarangayLogo} width={120} height={120} />
+                  <div>
+                    <h1>Republic of the Philippines</h1>
+                    <h1>Province of Pangasinan</h1>
+                    <h1>City of Dagupan</h1>
+                    <h1 className="mb-4">Barangay Pantal</h1>
+                    <h1 className="font-semibold text-3xl">CRS Report Form</h1>
                   </div>
-
-                  <h3 className="font-bold text-2xl">
-                    {`${reportsDetails.location.barangay}, ${reportsDetails.location.municipality}`}
-                  </h3>
-
-                  <p>
-                    Number of Casualties:{" "}
-                    {reportsDetails.numberOfCasualties
-                      ? reportsDetails.numberOfCasualties
-                      : "none"}
-                  </p>
-                  <p>
-                    Number of Injuries:{" "}
-                    {reportsDetails.numberOfInjuries
-                      ? reportsDetails.numberOfInjuries
-                      : "none"}
-                  </p>
-                  <p>
-                    Number of Casualties:{" "}
-                    {reportsDetails.numberOfCasualties
-                      ? reportsDetails.numberOfCasualties
-                      : "none"}
-                  </p>
-                  <p>
-                    Injury Severity:{" "}
-                    {reportsDetails.injurySeverity
-                      ? reportsDetails.injurySeverity
-                      : "none"}
-                  </p>
-
-                  <p>
-                    Reported by: {userDetails ? userDetails.name : "loading"}
-                  </p>
                 </div>
+                <div className="text-lg font-semibold mb-2">
+                  {reportsDetails.type}
+                </div>
+
+                <h3 className="font-semibold text-lg">
+                  {`${reportsDetails.location.barangay}, ${reportsDetails.location.municipality}`}
+                </h3>
+                <h1 className="text-lg font-semibold">
+                  Status: {reportsDetails.action_status}
+                </h1>
+                <p>
+                  Number of Casualties:{" "}
+                  {reportsDetails.numberOfCasualties
+                    ? reportsDetails.numberOfCasualties
+                    : "none"}
+                </p>
+                <p>
+                  Number of Injuries:{" "}
+                  {reportsDetails.numberOfInjuries
+                    ? reportsDetails.numberOfInjuries
+                    : "none"}
+                </p>
+                <p>
+                  Injury Severity:{" "}
+                  {reportsDetails.injurySeverity
+                    ? reportsDetails.injurySeverity
+                    : "none"}
+                </p>
+
+                <p className="mt-10 font-bold">
+                  Reported by: <br />{" "}
+                  {userDetails ? userDetails.name : "loading"}
+                </p>
               </div>
             )}
             <div className="modal-action flex flex-wrap justify-center items-center">
               <button
                 type="button"
                 onClick={handleChange}
-                className="focus:outline-none text-white text-lg  bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium 
-               rounded-lg px-5 py-2.5 m-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                className="focus:outline-none text-white text-lg bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium 
+                rounded-lg px-5 py-2.5 m-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
               >
                 Close
               </button>
